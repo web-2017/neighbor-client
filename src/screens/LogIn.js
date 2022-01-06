@@ -51,7 +51,7 @@ export default function LogIn() {
 
 				if (data?.message) {
 					// if error
-					setError(false)
+					setError(true)
 					setError(true)
 					return setMessage(data.message)
 				} else {
@@ -68,7 +68,6 @@ export default function LogIn() {
 				setLoading(false)
 			})
 			.finally(() => {
-				setError(false)
 				setLoading(false)
 			})
 	}

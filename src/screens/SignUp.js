@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import React, { useState } from 'react'
+import { View, StyleSheet } from 'react-native'
 import { Link, useNavigation } from '@react-navigation/native'
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
 
@@ -55,7 +55,6 @@ export default function SignUp() {
 			email,
 			password,
 		}
-		console.log(obj)
 
 		setLoading(true)
 
@@ -67,30 +66,29 @@ export default function SignUp() {
 			body: JSON.stringify(obj),
 		})
 			.then((data) => data.json())
-			.then(async (data) => {
-				setError(false)
-				setVisible(true)
-				setLoading(false)
-				// if error
-				if (data.message) {
-					setError(false)
+			.then((data) => {
+				if (data.error) {
+					setVisible(true)
 					setError(true)
-
-					return setMessage(data.message)
-				} else {
-					// success
-					setError(false)
-					setMessage('Welcome ' + data.user.firstName)
-
-					console.log('11')
-					navigation.navigate('profile')
+					setLoading(false)
+					return setMessage('Error, ' + data.error)
 				}
+				setVisible(true)
+				setMessage('Success, please LogIn')
+
+				setTimeout(() => {
+					setLoading(false)
+					setError(false)
+					setVisible(false)
+					navigation.navigate('login')
+				}, 500)
 			})
 			.catch((e) => {
 				setError(e)
 				setMessage(e.message)
 				setLoading(false)
 			})
+			.finally(() => setLoading(false))
 	}
 
 	return (
@@ -154,7 +152,13 @@ export default function SignUp() {
 				onChangeText={(text) => setRepeatPassword(text)}
 				autoCapitalize='none'
 			/>
-			<Button mode='contained' color={colors.green} style={styles.btn} loading={loading} onPress={saveUserHandler}>
+			<Button
+				mode='contained'
+				disabled={loading}
+				color={colors.green}
+				style={styles.btn}
+				loading={loading}
+				onPress={saveUserHandler}>
 				Sign Up
 			</Button>
 			<TextCustom>
