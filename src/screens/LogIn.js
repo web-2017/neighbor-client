@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Link, useNavigation } from '@react-navigation/native'
 import { View, StyleSheet } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
 
-import { TextInput, Button, useTheme, Snackbar, Paragraph } from 'react-native-paper'
 import TextCustom from '../components/TextCustom'
 import { BASE_URL } from '../api'
-import { saveStoreData, StoreData } from '../utils/AsyncStorage'
+import { saveStoreData } from '../utils/AsyncStorage'
+import { UserContext } from '../store/context'
+
+const fakeUser = {
+	email: 'webdevelope2017@gmail.com',
+	password: 'addqdd',
+}
 
 export default function LogIn() {
-	const [email, setEmail] = useState('webdevelope2017@gmail.com')
-	const [password, setPassword] = useState('addqdd')
+	const [stateUser, setStateUser] = useContext(UserContext)
+	const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? fakeUser.email : '')
+	const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? fakeUser.password : '')
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(false)
 	const [message, setMessage] = useState(null)
@@ -34,15 +40,16 @@ export default function LogIn() {
 			body: JSON.stringify({ email, password }),
 		})
 			.then((data) => data.json())
-			.then(async (data) => {
+			.then((data) => {
 				setError(false)
 				setVisible(true)
 				setLoading(false)
 
 				// save data to AsyncStorage
 				saveStoreData('user', data)
+				setStateUser(data)
 
-				if (data.message) {
+				if (data?.message) {
 					// if error
 					setError(false)
 					setError(true)
@@ -58,6 +65,10 @@ export default function LogIn() {
 			.catch((e) => {
 				setError(e)
 				setMessage(e.message)
+				setLoading(false)
+			})
+			.finally(() => {
+				setError(false)
 				setLoading(false)
 			})
 	}
@@ -96,7 +107,7 @@ export default function LogIn() {
 				color={colors.green}
 				style={styles.btn}
 				loading={loading}
-				onPress={logInHandler}>
+				onPress={() => logInHandler()}>
 				LogIn
 			</Button>
 			<TextCustom>

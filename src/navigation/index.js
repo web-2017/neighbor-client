@@ -1,17 +1,19 @@
+import { useContext } from 'react'
 import { useTheme } from 'react-native-paper'
-
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { createStackNavigator } from '@react-navigation/stack'
-
-import MainNavigation from './MainNavigation'
-import ProfileNavigation from './ProfileNavigation'
 import { NavigationContainer } from '@react-navigation/native'
+
+import { UserContext } from '../store/context/index'
+import MainNavigation from './MainNavigation'
+import SidebarNavigation from './Sidebar'
 
 const Stack = createStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
 
 function BottomTabNavigation() {
+	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
 
 	return (
@@ -31,10 +33,10 @@ function BottomTabNavigation() {
 					/>
 
 					<Tab.Screen
-						screenOptions={{ headerShown: false }}
+						// screenOptions={{ headerShown: false }}
 						name='ProfileTab'
 						options={{ title: 'Profile' }}
-						component={ProfileNavigation}
+						component={SidebarNavigation}
 						options={{
 							tabBarLabel: 'Profile',
 							tabBarIcon: ({ color }) => <MaterialCommunityIcons name='account' color={color} size={20} />,

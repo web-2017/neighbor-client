@@ -4,7 +4,6 @@ import * as Location from 'expo-location'
 import { View, Text, TextInput, Dimensions, StyleSheet, TouchableOpacity, Alert, Permissions } from 'react-native'
 
 import MarkerComponent from './MarkerComponent'
-import { mapDarkStyle } from '../config/mapStyle'
 
 const initialCoords = [
 	{ lat: 42.03508453490926, long: -87.91168817008241 },
