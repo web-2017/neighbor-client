@@ -14,7 +14,7 @@ export default function Profile({ navigation }) {
 	const [location, setLocation] = useState(null)
 	const [errorMsg, setErrorMsg] = useState(null)
 
-	const { user } = stateUser || ''
+	const { user } = stateUser ?? ''
 	const { colors } = useTheme()
 	useEffect(() => {
 		;(async () => {

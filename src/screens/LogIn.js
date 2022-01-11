@@ -104,7 +104,8 @@ export default function LogIn({ navigation }) {
 				color={colors.green}
 				style={styles.btn}
 				loading={loading}
-				onPress={logInHandler}>
+				onPress={logInHandler}
+				disabled={loading}>
 				LogIn
 			</Button>
 			<TextCustom>

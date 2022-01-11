@@ -16,13 +16,7 @@ export default function ProfileNavigation() {
 		<Stack.Navigator screenOptions={{ headerShown: false }}>
 			{stateUser?._id ? (
 				<Stack.Group>
-					<Stack.Screen
-						name='profileNavigator'
-						component={SidebarDrawerNavigation}
-						options={{
-							title: 'Profile',
-						}}
-					/>
+					<Stack.Screen name='profileNavigator' component={SidebarDrawerNavigation} />
 
 					<Stack.Group screenOptions={{ presentation: 'modal' }}>
 						<Stack.Screen name='user' component={User} />
