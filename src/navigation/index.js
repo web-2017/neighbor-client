@@ -8,6 +8,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { UserContext } from '../store/context/index'
 import MainNavigation from './MainNavigation'
 import SidebarNavigation from './Sidebar'
+import ProfileNavigation from './Sidebar'
 
 const Stack = createStackNavigator()
 const Tab = createMaterialBottomTabNavigator()
@@ -36,7 +37,8 @@ function BottomTabNavigation() {
 						// screenOptions={{ headerShown: false }}
 						name='ProfileTab'
 						options={{ title: 'Profile' }}
-						component={SidebarNavigation}
+						component={ProfileNavigation}
+						// component={SidebarNavigation}
 						options={{
 							tabBarLabel: 'Profile',
 							tabBarIcon: ({ color }) => <MaterialCommunityIcons name='account' color={color} size={20} />,

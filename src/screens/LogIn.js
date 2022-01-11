@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Link, useNavigation } from '@react-navigation/native'
+import { Link } from '@react-navigation/native'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
 
@@ -13,7 +13,7 @@ const fakeUser = {
 	password: 'addqdd',
 }
 
-export default function LogIn() {
+export default function LogIn({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? fakeUser.email : '')
 	const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? fakeUser.password : '')
@@ -23,7 +23,6 @@ export default function LogIn() {
 	const [error, setError] = useState(false)
 
 	const { colors } = useTheme()
-	const navigation = useNavigation()
 
 	const onDismissSnackBar = () => {
 		console.log('onDismissSnackBar')
@@ -32,44 +31,43 @@ export default function LogIn() {
 	const logInHandler = async () => {
 		setLoading(true)
 
-		await fetch(`${BASE_URL}/signin`, {
-			method: 'POST',
-			headers: {
-				'Content-type': 'application/json',
-			},
-			body: JSON.stringify({ email, password }),
-		})
-			.then((data) => data.json())
-			.then((data) => {
+		try {
+			const response = await fetch(`${BASE_URL}/signin`, {
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/json',
+				},
+				body: JSON.stringify({ email, password }),
+			})
+
+			const data = await response.json()
+
+			setError(false)
+			setVisible(true)
+			setLoading(false)
+
+			// save data to AsyncStorage
+			saveStoreData('user', data)
+			setStateUser(data)
+
+			if (response.status === 200) {
 				setError(false)
-				setVisible(true)
-				setLoading(false)
+				setMessage('Welcome ' + data.user.firstName)
 
-				// save data to AsyncStorage
-				saveStoreData('user', data)
-				setStateUser(data)
-
-				if (data?.message) {
-					// if error
-					setError(true)
-					setError(true)
-					return setMessage(data.message)
-				} else {
-					// if success
-					setError(false)
-					setMessage('Welcome ' + data.user.firstName)
-
-					navigation.navigate('profile')
-				}
-			})
-			.catch((e) => {
-				setError(e)
-				setMessage(e.message)
-				setLoading(false)
-			})
-			.finally(() => {
-				setLoading(false)
-			})
+				navigation.navigate('profile')
+				return
+			} else {
+				setError(true)
+				setError(true)
+				return setMessage(data.message)
+			}
+		} catch (error) {
+			setError(e)
+			setMessage(e.message)
+			setLoading(false)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	return (
@@ -106,7 +104,7 @@ export default function LogIn() {
 				color={colors.green}
 				style={styles.btn}
 				loading={loading}
-				onPress={() => logInHandler()}>
+				onPress={logInHandler}>
 				LogIn
 			</Button>
 			<TextCustom>
