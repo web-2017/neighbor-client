@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps'
 import { FontAwesome } from '@expo/vector-icons'
 import { Text } from 'react-native'
 import { useTheme, Avatar } from 'react-native-paper'
 
-import MyCustomMarkerView from './MyCustomMarkerView'
+import MarkerContent from './MarkerContent'
+import { UserContext } from '../store/context'
 
 export default function MarkerComponent({ coords }) {
+	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
 
 	return (
@@ -15,6 +17,7 @@ export default function MarkerComponent({ coords }) {
 			animateMarkerToCoordinate={{ latitude: coords.lat, longitude: coords.long }}
 			coordinate={{ latitude: coords.lat, longitude: coords.long }}
 			title={'afads'}
+			draggable
 			// pinColor={colors.alert}
 			// image={{
 			// 	uri: ``,
@@ -28,7 +31,7 @@ export default function MarkerComponent({ coords }) {
 			{/* <Text style={{ backgroundColor: '#fff' }}>Hello there</Text> */}
 			{/* <Avatar.Text size={55} label={'JD'} /> */}
 
-			<MyCustomMarkerView />
+			<MarkerContent user={stateUser} />
 		</Marker>
 	)
 }

@@ -2,16 +2,18 @@ import React from 'react'
 import { Alert, Image, View, Text, Dimensions, StyleSheet } from 'react-native'
 import { Callout } from 'react-native-maps'
 import { Paragraph, Avatar, Divider, Button } from 'react-native-paper'
-import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 const screen = Dimensions.get('screen')
 const date = new Date().toLocaleDateString('en-US')
 
-export default function MyCustomMarkerView() {
+export default function MarkerContent({ user }) {
 	const navigation = useNavigation()
+
+	console.log(user)
+
 	return (
-		<Callout style={styles.callout} onPress={() => navigation.navigate('user', { id: 11, data: 'asdfasdf' })}>
+		<Callout style={styles.callout} onPress={() => navigation.navigate('post', user)}>
 			<Text style={styles.title}>Hello there</Text>
 			<Divider />
 
