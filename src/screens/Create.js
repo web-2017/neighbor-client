@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
-import { Button, useTheme, Snackbar, TextInput, Title } from 'react-native-paper'
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
 
 import { BASE_URL } from '../api'
-import SnackBarCustom from '../components/SnackBarCustom'
 import { UserContext } from '../store/context'
+import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
 export default function Create() {
 	const { colors } = useTheme()
@@ -14,7 +14,8 @@ export default function Create() {
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('')
 	const [description, setDescription] = useState('')
-	const [imagePath, setImagePath] = useState('')
+	const [photo, setPhoto] = useState('')
+	const [imgPath, setImgPath] = useState(null)
 	const [isVisible, setIsVisible] = useState(false)
 	const [message, setMessage] = useState(null)
 	const [isError, setIsError] = useState(false)
@@ -31,7 +32,14 @@ export default function Create() {
 		})()
 	}, [])
 
+	useEffect(() => {
+		if (imgPath) {
+			createPostHandler() // if image come from data, create new Post
+		}
+	}, [imgPath])
+
 	const handleChoosePhoto = async () => {
+		setLoading(true)
 		let result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.Images,
 			allowsEditing: true,
@@ -42,26 +50,34 @@ export default function Create() {
 			allowsEditing: true,
 		})
 
-		console.log('handleChoosePhoto', result)
+		// console.log('handleChoosePhoto', result)
 
 		if (!result.cancelled) {
-			setImagePath(result.uri)
+			setPhoto(result.uri)
+			setLoading(false)
 		}
 	}
 
 	const handleUploadPhoto = async () => {
+		setLoading(true)
+		if (!title && !description && !price && !photo) {
+			setLoading(false)
+			setIsVisible(true)
+			setMessage('All fields are required')
+			return
+		}
+
 		const formData = new FormData()
 		formData.append('photo', {
 			name: new Date() + '_photo',
-			user: 1,
 			type: 'image/jpg',
-			uri: imagePath,
+			uri: photo,
 		})
 
 		fetch(`${BASE_URL}/uploads`, {
 			method: 'POST',
 			headers: {
-				// Accept: 'application/json',
+				Accept: 'application/json',
 				'Content-Type': 'multipart/form-data',
 				authorization: `Bearer ${stateUser?.token}`,
 			},
@@ -69,85 +85,148 @@ export default function Create() {
 		})
 			.then((response) => response.json())
 			.then((response) => {
-				console.log('response uploads', response)
+				console.log('response data', response)
+				setImgPath(response.uri)
+				setLoading(false)
 			})
 			.catch((error) => {
 				console.log('error', error)
 			})
+			.finally(() => setLoading(false))
 	}
 
-	// const createPost = async () => {
-	// 	try {
-	// 		const response = await fetch(`${BASE_URL}/create`, {
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				Authorization: `Bearer ${stateUser?.token}`,
-	// 			},
-	// 			body: JSON.stringify({ title, price, description, imgPath }),
-	// 		})
-	// 	} catch (err) {
-	// 		setIsError(false)
-	// 		setLoading(false)
-	// 		setMessage(err.message)
-	// 		console.error(err)
-	// 	}
-	// }
+	const createPostHandler = async () => {
+		if (!title && !description) {
+			setLoading(false)
+			setIsVisible(true)
+			setMessage('The title and price fields are required')
+			return
+		}
+
+		try {
+			const response = await fetch(`${BASE_URL}/create`, {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${stateUser?.token}`,
+				},
+				body: JSON.stringify({ title, price, description, images: imgPath }),
+			})
+
+			const data = await response.json()
+
+			console.log('Post', data)
+
+			if (response.status === 200) {
+				setIsError(false)
+				setLoading(false)
+				setIsVisible(true)
+				setMessage('New post created!')
+				setImgPath(null)
+				setPhoto('')
+				setPrice('')
+				setDescription('')
+				setTitle('')
+			}
+		} catch (err) {
+			setIsError(false)
+			setLoading(false)
+			setIsVisible(true)
+			setMessage(err.message)
+			console.error(err)
+		}
+	}
 
 	return (
-		<View style={styles.container}>
-			<Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title>
-			<SnackBarCustom message={message} visible={isVisible} error={isError} setVisible={setIsVisible} />
-			<TextInput
-				autoCapitalize='none'
-				mode='outlined'
-				placeholder='title'
-				defaultValue={title}
-				onChangeText={(text) => setTitle(text)}
-			/>
-			<TextInput
-				autoCapitalize='none'
-				mode='outlined'
-				placeholder='price'
-				defaultValue={price}
-				onChangeText={(text) => setPrice(text)}
-			/>
-			<TextInput
-				autoCapitalize='none'
-				mode='outlined'
-				placeholder='description'
-				defaultValue={description}
-				onChangeText={(text) => setDescription(text)}
-			/>
+		<ScrollView>
+			<View style={styles.container}>
+				<Portal>
+					<Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>
+						<Dialog.Title>{isError ? 'Error' : 'Success'}</Dialog.Title>
+						<Dialog.Content>
+							<Paragraph style={{ color: isError ? colors.alert : colors.green, fontSize: 20 }}>{message}!!!</Paragraph>
+						</Dialog.Content>
+						<Dialog.Actions>
+							<Button onPress={() => setIsVisible(false)} mode='contained'>
+								Close
+							</Button>
+						</Dialog.Actions>
+					</Dialog>
+				</Portal>
+				<Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title>
+				<TextInput
+					clearButtonMode='always'
+					autoCapitalize='none'
+					mode='outlined'
+					placeholder='title'
+					defaultValue={title}
+					value={title}
+					onChangeText={(text) => setTitle(text)}
+				/>
+				<TextInput
+					clearButtonMode='always'
+					autoCapitalize='none'
+					mode='outlined'
+					placeholder='price'
+					defaultValue={price}
+					value={price}
+					onChangeText={(text) => setPrice(text?.replace(/[^0-9]/g, ''))}
+				/>
+				<TextInput
+					autoCapitalize='none'
+					clearButtonMode='always'
+					mode='outlined'
+					placeholder='description'
+					defaultValue={description}
+					value={description}
+					onChangeText={(text) => setDescription(text)}
+				/>
+				{photo ? (
+					<View>
+						<Image
+							loadingIndicatorSource={photo || imgPath}
+							source={{ uri: photo ? photo : uploadImageFilter(`${BASE_URL}/${imgPath}`) }}
+							style={{ width: '80%', height: 200, marginVertical: 10, alignSelf: 'center', borderRadius: 20 }}
+						/>
 
-			{imagePath ? (
-				<View>
-					<Image source={{ uri: imagePath }} style={{ width: 300, height: 300 }} />
-					<Button title='Upload Photo' onPress={handleUploadPhoto}>
-						Upload Photo
+						<Button
+							title='Upload Photo'
+							onPress={() => {
+								setImgPath('')
+								setPhoto('')
+								setIsVisible(false)
+							}}
+							mode='contained'
+							icon={'close'}
+							dark
+							color={colors.alert}>
+							Clear
+						</Button>
+					</View>
+				) : (
+					<Button
+						title='Choose Photo'
+						icon={'camera'}
+						onPress={() => handleChoosePhoto()}
+						mode='contained'
+						color={colors.brown}
+						style={styles.btn}
+						loading={loading}>
+						Choose photo
 					</Button>
-				</View>
-			) : null}
+				)}
 
-			<Button
-				title='Choose Photo'
-				icon={'camera'}
-				onPress={handleChoosePhoto}
-				mode='contained'
-				color={colors.brown}
-				style={styles.btn}
-				loading={loading}>
-				Choose photo
-			</Button>
-			<Button
-				mode='contained'
-				color={colors.green}
-				style={styles.btn}
-				loading={loading}
-				onPress={() => createPost()}
-				disabled={loading}>
-				Create Post
-			</Button>
-		</View>
+				<Button
+					mode='contained'
+					color={colors.green}
+					style={styles.btn}
+					loading={loading}
+					onPress={() => handleUploadPhoto()}
+					disabled={loading}>
+					Create Post
+				</Button>
+			</View>
+		</ScrollView>
 	)
 }
 
@@ -157,5 +236,9 @@ const styles = StyleSheet.create({
 	},
 	btn: {
 		marginVertical: 10,
+	},
+	btnContainer: {
+		justifyContent: 'space-around',
+		flexDirection: 'row',
 	},
 })
