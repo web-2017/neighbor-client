@@ -7,7 +7,8 @@ import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
 import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
-export default function Create({ navigation }) {
+export default function EditPost({ navigation, route }) {
+	const { post } = route.params
 	const { colors } = useTheme()
 	const [stateUser, setStateUser] = useContext(UserContext)
 
@@ -22,19 +23,17 @@ export default function Create({ navigation }) {
 	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		;(async () => {
-			if (Platform.OS !== 'web') {
-				const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-				if (status !== 'granted') {
-					alert('Sorry, we need camera roll permissions to make this work!')
-				}
-			}
-		})()
-	}, [])
+		console.log(11, post)
+		if (post) {
+			setTitle(post?.title)
+			setPrice(post?.price.toString())
+			setDescription(post?.description)
+		}
+	}, [post])
 
 	useEffect(() => {
 		if (imgPath) {
-			createPostHandler() // if image come from data, create new Post
+			updatePostHandler() // if image come from data, create new Post
 		}
 	}, [imgPath])
 
@@ -98,7 +97,7 @@ export default function Create({ navigation }) {
 			.finally(() => setLoading(false))
 	}
 
-	const createPostHandler = async () => {
+	const updatePostHandler = async () => {
 		if (!title && !description) {
 			setLoading(false)
 			setIsVisible(true)
@@ -107,30 +106,26 @@ export default function Create({ navigation }) {
 		}
 
 		try {
-			const response = await fetch(`${BASE_URL}/create`, {
-				method: 'post',
+			const response = await fetch(`${BASE_URL}/post`, {
+				method: 'put',
 				headers: {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${stateUser?.token}`,
 				},
-				body: JSON.stringify({ title, price, description, images: imgPath }),
+				body: JSON.stringify({ title, price, description, images: imgPath, postId: post?._id }),
 			})
 
 			const data = await response.json()
 
-			// console.log('Post', data)
+			console.log('updated Post', data)
 
 			if (response.status === 200) {
 				setIsError(false)
 				setLoading(false)
 				setIsVisible(true)
-				setMessage('New post created!')
+				setMessage('Updated post success!')
 				setImgPath(null)
-				setPhoto('')
-				setPrice('')
-				setDescription('')
-				setTitle('')
-				navigation.navigate('posts')
+				navigation.navigate('allposts')
 			} else {
 				setLoading(false)
 			}
@@ -159,7 +154,7 @@ export default function Create({ navigation }) {
 						</Dialog.Actions>
 					</Dialog>
 				</Portal>
-				<Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title>
+				<Title style={{ textAlign: 'center', marginVertical: 30 }}>Edit post</Title>
 				<TextInput
 					clearButtonMode='always'
 					autoCapitalize='none'
@@ -174,7 +169,7 @@ export default function Create({ navigation }) {
 					mode='outlined'
 					placeholder='price'
 					value={price}
-					onChangeText={(text) => setPrice(text?.replace(/[^0-9]/g, ''))}
+					onChangeText={(text) => setPrice(text.replace(/[^0-9]/g, ''))}
 				/>
 				<TextInput
 					autoCapitalize='none'
@@ -208,14 +203,13 @@ export default function Create({ navigation }) {
 					</View>
 				) : (
 					<Button
-						title='Choose Photo'
 						icon={'camera'}
 						onPress={() => handleChoosePhoto()}
 						mode='contained'
 						color={colors.brown}
 						style={styles.btn}
 						loading={loading}>
-						Choose photo
+						change photo
 					</Button>
 				)}
 
@@ -224,9 +218,9 @@ export default function Create({ navigation }) {
 					color={colors.green}
 					style={styles.btn}
 					loading={loading}
-					onPress={() => (photo ? handleUploadPhoto() : createPostHandler())}
+					onPress={() => (photo ? handleUploadPhoto() : updatePostHandler())}
 					disabled={loading}>
-					Create Post
+					Update Post
 				</Button>
 			</View>
 		</ScrollView>

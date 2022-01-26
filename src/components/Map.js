@@ -60,7 +60,7 @@ export default function Map({ navigation }) {
 				}}>
 				{coords && coords.map((coords, index) => <MarkerComponent key={index} coords={coords} />)}
 			</MapView>
-			<View style={{ position: 'absolute', top: 30, width: '100%' }}>
+			{/* <View style={{ position: 'absolute', top: 30, width: '100%' }}>
 				<TextInput
 					style={{
 						borderRadius: 10,
@@ -76,7 +76,7 @@ export default function Map({ navigation }) {
 					placeholder={'Search'}
 					placeholderTextColor={'#666'}
 				/>
-			</View>
+			</View> */}
 		</View>
 	)
 }

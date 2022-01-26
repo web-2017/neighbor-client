@@ -10,7 +10,7 @@ const date = new Date().toLocaleDateString('en-US')
 export default function MarkerContent({ user }) {
 	const navigation = useNavigation()
 
-	console.log(user)
+	// console.log(user)
 
 	return (
 		<Callout style={styles.callout} onPress={() => navigation.navigate('post', user)}>

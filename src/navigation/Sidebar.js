@@ -5,6 +5,7 @@ import { UserContext } from '../store/context'
 import LogIn from '../screens/LogIn'
 import SignUp from '../screens/SignUp'
 import User from '../screens/User'
+import Post from '../screens/Post'
 import SidebarDrawerNavigation from './SidebarDrawerNavigation'
 
 const Stack = createStackNavigator()

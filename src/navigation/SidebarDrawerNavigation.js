@@ -63,7 +63,7 @@ export default function SidebarDrawerNavigation({ navigation }) {
 					}}
 				/>
 				<Drawer.Screen
-					name='Create'
+					name='create'
 					component={Create}
 					options={{
 						title: 'Create',
