@@ -49,7 +49,6 @@ export default function EditPost({ navigation, route }) {
 			base64: false,
 			allowsEditing: true,
 		})
-		// console.log('handleChoosePhoto', result)
 		if (!result.cancelled) {
 			setPhoto(result.uri)
 			setLoading(false)
@@ -112,7 +111,7 @@ export default function EditPost({ navigation, route }) {
 					'Content-Type': 'application/json',
 					Authorization: `Bearer ${stateUser?.token}`,
 				},
-				body: JSON.stringify({ title, price, description, images: imgPath, postId: post?._id }),
+				body: JSON.stringify({ title, price, description, images: imgPath ? imgPath : undefined, postId: post?._id }),
 			})
 
 			const data = await response.json()
