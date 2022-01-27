@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import * as Location from 'expo-location'
-import { Button, Caption, useTheme, Title } from 'react-native-paper'
+import { Button, Paragraph, useTheme, Title } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons'
 
@@ -16,7 +16,9 @@ export default function Profile({ navigation }) {
 
 	const { user } = stateUser ?? ''
 	const { colors } = useTheme()
+
 	useEffect(() => {
+		console.log(stateUser)
 		;(async () => {
 			let { status } = await Location.requestForegroundPermissionsAsync()
 			if (status !== 'granted') {
@@ -50,14 +52,14 @@ export default function Profile({ navigation }) {
 	return (
 		<View style={styles.container}>
 			{/* <Title style={{ textAlign: 'center' }}>My info</Title> */}
-			<Caption>
+			<Paragraph>
 				Name: {user?.firstName} {user?.lastName}
-			</Caption>
-			<Caption>
+			</Paragraph>
+			<Paragraph>
 				Nickname: {user?.nickname} {user?.lastName}
-			</Caption>
-			<Caption>Email: {user?.email}</Caption>
-			<Caption>Tel: + {user?.tel}</Caption>
+			</Paragraph>
+			<Paragraph>Email: {user?.email}</Paragraph>
+			<Paragraph>Tel: + {user?.tel}</Paragraph>
 			<Button
 				color={colors.blue}
 				mode='contained'
