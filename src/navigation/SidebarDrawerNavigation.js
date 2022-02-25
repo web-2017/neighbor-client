@@ -8,6 +8,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { UserContext } from '../store/context'
 import Profile from '../screens/Profile'
 import Create from '../screens/Create'
+import EditAddress from '../screens/EditAddress'
 
 const Drawer = createDrawerNavigator()
 
@@ -67,6 +68,13 @@ export default function SidebarDrawerNavigation({ navigation }) {
 					component={Create}
 					options={{
 						title: 'Create',
+					}}
+				/>
+				<Drawer.Screen
+					name='editaddress'
+					component={EditAddress}
+					options={{
+						title: 'Location',
 					}}
 				/>
 			</Drawer.Group>

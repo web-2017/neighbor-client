@@ -8,10 +8,11 @@ import { AntDesign } from '@expo/vector-icons'
 import { saveStoreData } from '../utils/AsyncStorage'
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
+import { keys } from '../api/keys'
 
 export default function Profile({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
-	const [location, setLocation] = useState(null)
+	const [location, setLocation] = useState([])
 	const [errorMsg, setErrorMsg] = useState(null)
 
 	const { user } = stateUser ?? ''
@@ -60,6 +61,9 @@ export default function Profile({ navigation }) {
 			</Paragraph>
 			<Paragraph>Email: {user?.email}</Paragraph>
 			<Paragraph>Tel: + {user?.tel}</Paragraph>
+			<Paragraph>
+				{user?.coords?.address ? 'My Address: ' + user?.coords?.address : 'You should add your address'}
+			</Paragraph>
 			<Button
 				color={colors.blue}
 				mode='contained'
