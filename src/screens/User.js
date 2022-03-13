@@ -15,7 +15,7 @@ export default function User({ route, navigation }) {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [nickname, setNickname] = useState('')
-	const [address, setAddress] = useState('')
+	// const [address, setAddress] = useState('')
 	const [tel, setTel] = useState('')
 	const [loading, setLoading] = useState(false)
 	useEffect(() => {
@@ -24,7 +24,7 @@ export default function User({ route, navigation }) {
 		setLastName(user.lastName)
 		setNickname(user.nickname)
 		setTel(user.tel)
-		setAddress(user.coords?.address)
+		// setAddress(user.coords?.address)
 	}, [route?.params])
 
 	useEffect(() => {
@@ -67,7 +67,7 @@ export default function User({ route, navigation }) {
 			<Title>Edit user info {user.firstName}</Title>
 			<TextInput
 				label={'first name'}
-				value={user.firstName}
+				defaultValue={user.firstName}
 				mode='outlined'
 				dense
 				clearButtonMode='always'
@@ -75,7 +75,7 @@ export default function User({ route, navigation }) {
 			/>
 			<TextInput
 				label={'last name'}
-				value={user.lastName}
+				defaultValue={user.lastName}
 				mode='outlined'
 				dense
 				clearButtonMode='always'
@@ -85,15 +85,21 @@ export default function User({ route, navigation }) {
 				dense
 				mode='outlined'
 				placeholder='nickname'
-				value={user.nickname}
+				defaultValue={user.nickname}
 				onChangeText={(text) => setNickname(text)}
 			/>
-			<TextInput dense mode='outlined' placeholder='tel*' value={user.tel} onChangeText={(text) => setTel(text)} />
+			<TextInput
+				dense
+				mode='outlined'
+				placeholder='tel*'
+				defaultValue={user.tel}
+				onChangeText={(text) => setTel(text)}
+			/>
 			<TextInput
 				dense
 				mode='outlined'
 				placeholder='email*'
-				value={user.email}
+				defaultValue={user.email}
 				onChangeText={(text) => setEmail(text)}
 				autoCapitalize='none'
 			/>
@@ -101,7 +107,7 @@ export default function User({ route, navigation }) {
 				dense
 				mode='outlined'
 				placeholder='address'
-				value={user?.coords?.address}
+				defaultValue={user?.coords?.address}
 				autoCapitalize='none'
 				editable={false}
 			/>
