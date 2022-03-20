@@ -2,24 +2,23 @@ import React, { useEffect, useState, useContext } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import * as Location from 'expo-location'
 import { Button, Paragraph, useTheme, Title } from 'react-native-paper'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AntDesign } from '@expo/vector-icons'
 
 import { saveStoreData } from '../utils/AsyncStorage'
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
-import { keys } from '../api/keys'
 
 export default function Profile({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
+	const [address, setAddress] = useState(null)
 	const [location, setLocation] = useState([])
+	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrorMsg] = useState(null)
 
-	const { user } = stateUser ?? ''
 	const { colors } = useTheme()
 
 	useEffect(() => {
-		console.log(stateUser)
+		console.log('stateUser', stateUser)
 		;(async () => {
 			let { status } = await Location.requestForegroundPermissionsAsync()
 			if (status !== 'granted') {
@@ -34,36 +33,39 @@ export default function Profile({ navigation }) {
 		})()
 	}, [])
 
-	// useEffect(() => {
-	// 	;(async () => {
-	// 		fetch(`${BASE_URL}/user/${stateUser._id}`, {
-	// 			method: 'GET',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				Authorization: `Bearer ${stateUser?.token}`,
-	// 			},
-	// 		})
-	// 			.then((jsonData) => jsonData.json())
-	// 			.then((data) => {
-	// 				console.log(data)
-	// 			})
-	// 	})()
-	// }, [])
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', async () => {
+			fetch(`${BASE_URL}/user/${stateUser._id}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${stateUser?.token}`,
+				},
+			})
+				.then((jsonData) => jsonData.json())
+				.then((data) => {
+					setAddress(data.user)
+					saveStoreData('user', { _id: stateUser._id, token: stateUser.token, user: data.user })
+					setStateUser({ _id: stateUser._id, token: stateUser.token, user: data.user })
+				})
+		})
+
+		return unsubscribe
+	}, [])
 
 	return (
 		<View style={styles.container}>
 			{/* <Title style={{ textAlign: 'center' }}>My info</Title> */}
 			<Paragraph>
-				Name: {user?.firstName} {user?.lastName}
+				Name: {address?.firstName} {address?.lastName}
 			</Paragraph>
 			<Paragraph>
-				Nickname: {user?.nickname} {user?.lastName}
+				Nickname: {address?.nickname} {address?.lastName}
 			</Paragraph>
-			<Paragraph>Email: {user?.email}</Paragraph>
-			<Paragraph>Tel: + {user?.tel}</Paragraph>
-			<Paragraph>
-				{user?.coords?.address ? 'My Address: ' + user?.coords?.address : 'You should add your address'}
-			</Paragraph>
+			<Paragraph>Email: {address?.email}</Paragraph>
+			<Paragraph>Tel: + {address?.tel}</Paragraph>
+			{address?.address && <Paragraph>Location: {address?.address}</Paragraph>}
+
 			<Button
 				color={colors.blue}
 				mode='contained'

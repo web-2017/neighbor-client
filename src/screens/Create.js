@@ -14,6 +14,7 @@ export default function Create({ navigation }) {
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('0')
 	const [description, setDescription] = useState('')
+	const [address, setAddress] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [imgPath, setImgPath] = useState(null)
 	const [isVisible, setIsVisible] = useState(false)
@@ -184,6 +185,15 @@ export default function Create({ navigation }) {
 					value={description}
 					onChangeText={(text) => setDescription(text)}
 				/>
+				<TextInput
+					mode='contained'
+					placeholder='Address'
+					value={address}
+					onChangeText={(text) => setAddress(text)}
+					onPressIn={() => navigation.navigate('location')}
+					disabled
+				/>
+
 				{photo ? (
 					<View>
 						<Image

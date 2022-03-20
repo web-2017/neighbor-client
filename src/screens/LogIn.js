@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link } from '@react-navigation/native'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateUser, userSlice } from '../store/reducers/userReducer'
 
 import TextCustom from '../components/TextCustom'
 import { BASE_URL } from '../api'
@@ -14,6 +16,12 @@ const fakeUser = {
 }
 
 export default function LogIn({ navigation }) {
+	// const user = useSelector((state) => state.counter.value)
+	// const user = useSelector((state) => state.user)
+	// const dispatch = useDispatch()
+
+	// dispatch(updateUser(fakeUser, 33))
+
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? fakeUser.email : '')
 	const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? fakeUser.password : '')

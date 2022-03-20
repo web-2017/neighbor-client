@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useFocusEffect } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { TextInput, Title, Button, useTheme } from 'react-native-paper'
 
@@ -15,21 +15,16 @@ export default function User({ route, navigation }) {
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
 	const [nickname, setNickname] = useState('')
-	// const [address, setAddress] = useState('')
 	const [tel, setTel] = useState('')
 	const [loading, setLoading] = useState(false)
 	useEffect(() => {
-		setEmail(user.email)
-		setFirstName(user.firstName)
-		setLastName(user.lastName)
-		setNickname(user.nickname)
+		setEmail(user?.email)
+		setFirstName(user?.firstName)
+		setLastName(user?.lastName)
+		setNickname(user?.nickname)
+		setNickname(user?.address)
 		setTel(user.tel)
-		// setAddress(user.coords?.address)
 	}, [route?.params])
-
-	useEffect(() => {
-		console.log('stateUser', stateUser)
-	}, [stateUser])
 
 	const saveUserHandler = () => {
 		const obj = {
@@ -40,6 +35,7 @@ export default function User({ route, navigation }) {
 			nickname,
 		}
 		setLoading(true)
+
 		fetch(`${BASE_URL}/user/${route?.params?._id}`, {
 			method: 'put',
 			headers: {
@@ -50,7 +46,6 @@ export default function User({ route, navigation }) {
 		})
 			.then((data) => data.json())
 			.then((updatedUser) => {
-				// console.log('updatedUser', updatedUser)
 				saveStoreData('user', { _id: stateUser._id, token: stateUser.token, user: updatedUser })
 				setStateUser({ _id: stateUser._id, token: stateUser.token, user: updatedUser })
 				navigation.goBack()
@@ -103,27 +98,30 @@ export default function User({ route, navigation }) {
 				onChangeText={(text) => setEmail(text)}
 				autoCapitalize='none'
 			/>
-			<TextInput
-				dense
-				mode='outlined'
-				placeholder='address'
-				defaultValue={user?.coords?.address}
-				autoCapitalize='none'
-				editable={false}
-			/>
-
 			<View>
+				{user?.address && (
+					<TextInput
+						dense
+						multiline
+						mode='outlined'
+						placeholder='address'
+						disabled
+						defaultValue={user?.address}
+						onChangeText={(text) => setEmail(text)}
+						autoCapitalize='none'
+					/>
+				)}
+
 				<Button
-					onPress={() => navigation.navigate('editaddress')}
 					marginTop={10}
 					mode='contained'
-					color={colors.accent}
-					icon={'home'}
+					color={user?.address ? colors.blue : colors.red}
+					icon={'map'}
 					loading={loading}
-					disabled={loading}>
-					{user?.coords?.address ? 'Edit Address' : 'Add Address'}
+					disabled={loading}
+					onPress={() => navigation.navigate('location', { userId: `${route?.params?._id}`, token: stateUser.token })}>
+					{user?.address ? 'Edit location' : 'Add location !!!'}
 				</Button>
-
 				<Button
 					marginTop={10}
 					mode='contained'

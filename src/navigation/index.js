@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { NavigationContainer } from '@react-navigation/native'
 
-import ProfileNavigation from './Sidebar'
+import ProfileNavigation from './ProfileNavigation'
 import Home from '../screens/Home'
 import PostNavigation from './PostNavigation'
 
@@ -43,7 +43,6 @@ function BottomTabNavigation() {
 				/>
 				<Tab.Screen
 					name='Profile'
-					options={{ title: 'Profile' }}
 					component={ProfileNavigation}
 					options={{
 						tabBarLabel: 'Profile',
