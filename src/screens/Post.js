@@ -83,17 +83,18 @@ export default function Post({ route, navigation }) {
 			</View>
 			<View style={styles.container}>
 				<Caption>Created: {formatDate(post.createdAt)}</Caption>
-				<Title>{post?.title}</Title>
-				<Paragraph>{post?.price}</Paragraph>
-				<Paragraph>address</Paragraph>
-				<Paragraph>{post?.description}</Paragraph>
+				<Title>Title: {post?.title}</Title>
+				<Paragraph>Price: {post?.price}</Paragraph>
+				<Paragraph>Address {stateUser?.user?.address}</Paragraph>
+				<Paragraph>Description: {post?.description}</Paragraph>
 				<Button
 					// title='Choose Photo'
 					icon={'pencil'}
 					onPress={() => navigation.navigate('editPost', { post })}
 					mode='contained'
 					color={colors.primary}
-					loading={loading}>
+					loading={loading}
+					style={{ marginVertical: 20 }}>
 					Edit Post
 				</Button>
 			</View>
