@@ -1,16 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, Image, ScrollView } from 'react-native'
 import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
 
 import { BASE_URL } from '../api'
-import { UserContext } from '../store/context'
 import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
 export default function EditPost({ navigation, route }) {
 	const { post } = route.params
 	const { colors } = useTheme()
-	const [stateUser, setStateUser] = useContext(UserContext)
 
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('0')
@@ -23,7 +21,7 @@ export default function EditPost({ navigation, route }) {
 	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		console.log(11, post)
+		console.log('post', post)
 		if (post) {
 			setTitle(post?.title)
 			setPrice(post?.price.toString())

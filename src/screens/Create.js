@@ -2,14 +2,19 @@ import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
 import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
+import { useIsFocused } from '@react-navigation/core'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
 import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
-export default function Create({ navigation }) {
+export default function Create({ navigation, route }) {
 	const { colors } = useTheme()
 	const [stateUser, setStateUser] = useContext(UserContext)
+	const isFocused = useIsFocused()
+	const { user, isLoading } = useSelector((state) => state)
+	console.log('user11', user)
 
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('0')
@@ -32,6 +37,10 @@ export default function Create({ navigation }) {
 			}
 		})()
 	}, [])
+
+	useEffect(() => {
+		// console.log('route', route)
+	}, [isFocused])
 
 	useEffect(() => {
 		if (imgPath) {
@@ -160,7 +169,7 @@ export default function Create({ navigation }) {
 						</Dialog.Actions>
 					</Dialog>
 				</Portal>
-				<Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title>
+				{/* <Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title> */}
 				<TextInput
 					clearButtonMode='always'
 					autoCapitalize='none'
@@ -190,7 +199,9 @@ export default function Create({ navigation }) {
 					placeholder='Address'
 					value={address}
 					onChangeText={(text) => setAddress(text)}
-					onPressIn={() => navigation.navigate('location')}
+					onPressIn={() =>
+						navigation.navigate('googleSearchLocation', { userId: stateUser._id, token: stateUser.token })
+					}
 					disabled
 				/>
 
@@ -245,7 +256,8 @@ export default function Create({ navigation }) {
 
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 30,
+		marginHorizontal: 10,
+		marginTop: 30,
 	},
 	btn: {
 		marginVertical: 10,

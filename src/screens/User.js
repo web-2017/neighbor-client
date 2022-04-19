@@ -99,29 +99,6 @@ export default function User({ route, navigation }) {
 				autoCapitalize='none'
 			/>
 			<View>
-				{user?.address && (
-					<TextInput
-						dense
-						multiline
-						mode='outlined'
-						placeholder='address'
-						disabled
-						defaultValue={user?.address}
-						onChangeText={(text) => setEmail(text)}
-						autoCapitalize='none'
-					/>
-				)}
-
-				<Button
-					marginTop={10}
-					mode='contained'
-					color={user?.address ? colors.blue : colors.red}
-					icon={'map'}
-					loading={loading}
-					disabled={loading}
-					onPress={() => navigation.navigate('location', { userId: `${route?.params?._id}`, token: stateUser.token })}>
-					{user?.address ? 'Edit location' : 'Add location !!!'}
-				</Button>
 				<Button
 					marginTop={10}
 					mode='contained'

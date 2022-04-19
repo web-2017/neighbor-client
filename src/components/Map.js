@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps'
 import * as Location from 'expo-location'
 import { View, Text, TextInput, Dimensions, StyleSheet, TouchableOpacity, Alert, Permissions } from 'react-native'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 
+import { BASE_URL } from '../api'
+import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
-import { keys } from '../api/keys'
 
 const latitudeDelta = 0.025
-const longitudeDelta = 0.025
+const longitudeDelta = 0.05
 
-const initialCoords = [
-	{ lat: 42.03508453490926, long: -87.91168817008241 },
-	{ lat: 42.04605315115955, long: -87.86093266932191 },
-]
+const initialCoords = {
+	lat: 42.03508453490926,
+	lng: -87.91168817008241,
+	latitudeDelta: 0.025,
+	longitudeDelta: 0.05,
+}
 
 export default function Map({ navigation }) {
-	const [paddingTop, setPaddingTop] = useState(0)
-	const [coords, setCoords] = useState(initialCoords)
-	const [location, setLocation] = useState([])
+	const [stateUser, setStateUser] = useContext(UserContext)
+	const [paddingStyle, setPadding] = useState(0) // show showMyLocation button
+	const [coords, setCoords] = useState([initialCoords])
+	const [region, setRegion] = useState(initialCoords)
 	const [errorMsg, setErrorMsg] = useState(null)
-	const [currentAddress, setCurrentAddress] = useState(null)
-	const [searchString, setSearchString] = useState('https://maps.googleapis.com/maps/api/geocode/json?address=')
-	const GOOGLE_PACES_API_BASE_URL = 'https://maps.googleapis.com/maps/api/place'
 
 	const mapRef = useRef()
 
@@ -35,82 +35,61 @@ export default function Map({ navigation }) {
 			}
 
 			let location = await Location.getCurrentPositionAsync({})
-			setLocation(location)
-			// console.log(location)
 		})()
 	}, [])
 
 	useEffect(() => {
-		if (currentAddress) {
-			getCurrentAddressHandler(currentAddress)
-		}
-	}, [currentAddress])
-
-	const getCurrentAddressHandler = (coords) => {
-		fetch(`${searchString}=${coords}&key=${keys.GOOGLE_MAP_KEY}`)
-			.then((response) => response.json())
-			.then((responseJson) => {
-				const { location } = responseJson.results[0].geometry
-				console.log(location)
-				setLocation(location)
+		const unsubscribe = navigation.addListener('focus', () => {
+			fetch(`${BASE_URL}/all-posts`, {
+				method: 'get',
 			})
-	}
+				.then((json) => json.json())
+				.then((data) => {
+					console.log('newPosts', data)
+					const newCoords = data?.map((x) => {
+						return x.postedBy.coords
+					})
+					setCoords(newCoords)
+					// console.log('map data', newCoords)
+				})
+				.catch((err) => console.log(err))
+		})
+		return unsubscribe
+	}, [navigation])
 
 	return (
-		<View style={{ paddingBottom: paddingTop }}>
+		<View style={{ flex: 1 }}>
 			<MapView
 				ref={mapRef}
-				userInterfaceStyle='light'
-				region={{
-					latitude: 42.03508453490926,
-					longitude: -87.91168817008241,
-					latitudeDelta: latitudeDelta,
-					longitudeDelta: longitudeDelta,
+				provider={PROVIDER_GOOGLE}
+				userInterfaceStyle='dark'
+				initialRegion={{
+					latitude: region.lat,
+					longitude: region.lng,
+					latitudeDelta: region.latitudeDelta,
+					longitudeDelta: region.longitudeDelta,
 				}}
-				animateToRegion={{ region: { latitude: 42.03508453490926, longitude: -87.91168817008241 }, duration: 300 }}
-				// provider={PROVIDER_GOOGLE}
+				showsUserLocation={true}
+				// zoomEnabled={true}
+				showsMyLocationButton={true}
+				style={{
+					...StyleSheet.absoluteFillObject,
+					paddingBottom: paddingStyle,
+				}}
+				// animateToRegion={{
+				// 	region: { latitude: 37.78825, longitude: -122.4324, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
+				// 	duration: 300,
+				// }}
 				zoomEnabled={true}
 				zoomControlEnabled={true}
-				showsUserLocation={true}
-				showsMyLocationButton={true}
 				scrollEnabled={true}
 				loadingEnabled
-				style={styles.map}
 				onMapReady={() => {
 					console.log('Map ready')
-					setPaddingTop(300)
+					setPadding(100)
 				}}>
 				{coords && coords.map((coords, index) => <MarkerComponent key={index} coords={coords} />)}
 			</MapView>
-			<View style={{ position: 'absolute', top: 100, width: '100%' }}>
-				<Text>{location && `${location.lat} ${location.lng}`}</Text>
-				<View
-					style={{
-						borderRadius: 10,
-						margin: 10,
-						color: '#000',
-						borderColor: '#666',
-						backgroundColor: '#FFF',
-						borderWidth: 1,
-						// height: 45,
-						paddingHorizontal: 10,
-						fontSize: 18,
-					}}>
-					<GooglePlacesAutocomplete
-						placeholder='Search'
-						onPress={(data, details = null) => {
-							// 'details' is provided when fetchDetails = true
-							console.log('data', data.description)
-							setCurrentAddress(data.description)
-							// console.log('details', details.types[1])
-						}}
-						query={{
-							key: keys.GOOGLE_MAP_KEY,
-							language: 'en',
-						}}
-					/>
-				</View>
-			</View>
 		</View>
 	)
 }

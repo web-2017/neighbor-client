@@ -3,7 +3,7 @@ import { Link } from '@react-navigation/native'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateUser, userSlice } from '../store/reducers/userReducer'
+import { setUserReducer } from '../store/reducers/userReducer'
 
 import TextCustom from '../components/TextCustom'
 import { BASE_URL } from '../api'
@@ -16,13 +16,10 @@ const fakeUser = {
 }
 
 export default function LogIn({ navigation }) {
-	// const user = useSelector((state) => state.counter.value)
-	// const user = useSelector((state) => state.user)
-	// const dispatch = useDispatch()
-
-	// dispatch(updateUser(fakeUser, 33))
+	const dispatch = useDispatch()
 
 	const [stateUser, setStateUser] = useContext(UserContext)
+
 	const [email, setEmail] = useState(process.env.NODE_ENV === 'development' ? fakeUser.email : '')
 	const [password, setPassword] = useState(process.env.NODE_ENV === 'development' ? fakeUser.password : '')
 	const [loading, setLoading] = useState(false)
@@ -53,10 +50,11 @@ export default function LogIn({ navigation }) {
 			setError(false)
 			setVisible(true)
 			setLoading(false)
+			console.log('data', data)
+			saveStoreData('user', data) // save data to AsyncStorage
+			setStateUser(data) // save UserContext
 
-			// save data to AsyncStorage
-			saveStoreData('user', data)
-			setStateUser(data)
+			dispatch(setUserReducer(data)) // set data to AsyncStorage
 
 			if (response.status === 200) {
 				setError(false)
@@ -70,8 +68,8 @@ export default function LogIn({ navigation }) {
 				return setMessage(data.message)
 			}
 		} catch (error) {
-			setError(e)
-			setMessage(e.message)
+			setError(error)
+			setMessage(error.message)
 			setLoading(false)
 		} finally {
 			setLoading(false)

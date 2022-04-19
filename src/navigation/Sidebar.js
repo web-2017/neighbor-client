@@ -62,13 +62,13 @@ export default function Sidebar({ navigation }) {
 						title: 'Profile',
 					}}
 				/>
-				<Drawer.Screen
+				{/* <Drawer.Screen
 					name='create'
 					component={Create}
 					options={{
 						title: 'Create',
 					}}
-				/>
+				/> */}
 			</Drawer.Group>
 		</Drawer.Navigator>
 	)

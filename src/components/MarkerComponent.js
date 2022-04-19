@@ -7,17 +7,18 @@ import { useTheme, Avatar } from 'react-native-paper'
 import MarkerContent from './MarkerContent'
 import { UserContext } from '../store/context'
 
-export default function MarkerComponent({ coords }) {
+export default function MarkerComponent({ coords, index }) {
+	console.log('coords', coords)
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
 
 	return (
 		<Marker
 			// onPress={() => Alert.alert('alarm', 'dasfds')}
-			animateMarkerToCoordinate={{ latitude: coords.lat, longitude: coords.long }}
-			coordinate={{ latitude: coords.lat, longitude: coords.long }}
-			title={'afads'}
+			coordinate={{ latitude: coords.lat, longitude: coords.lng }}
+			title={'Hello'}
 			draggable
+			key={index}
 			// pinColor={colors.alert}
 			// image={{
 			// 	uri: ``,

@@ -1,17 +1,19 @@
-import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { Link, useNavigation } from '@react-navigation/native'
-import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
+import React, { useState, useEffect } from 'react'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Link } from '@react-navigation/native'
+import { TextInput, Button, useTheme, Snackbar, Text } from 'react-native-paper'
+import { useSelector } from 'react-redux'
 
 import TextCustom from '../components/TextCustom'
 import { BASE_URL } from '../api'
 
-export default function SignUp() {
+export default function SignUp({ navigation }) {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [repeatPassword, setRepeatPassword] = useState('')
 	const [firstName, setFirstName] = useState('')
 	const [lastName, setLastName] = useState('')
+	const [coords, setCoords] = useState({ address: '' })
 	const [nickname, setNickname] = useState('')
 	const [tel, setTel] = useState('')
 	const [loading, setLoading] = useState(false)
@@ -19,14 +21,19 @@ export default function SignUp() {
 	const [message, setMessage] = useState(null)
 	const [error, setError] = useState(false)
 
-	const navigation = useNavigation()
-	// navigation.navigate('profile')
+	const user = useSelector((state) => state.user)
+
+	useEffect(() => {
+		if (user) {
+			setCoords(user)
+		}
+	}, [user])
 
 	const { colors } = useTheme()
 
 	const saveUserHandler = async () => {
 		// if empty
-		if (!firstName && !lastName && !email && !password && !repeatPassword && !tel) {
+		if (!firstName && !lastName && !email && !password && !repeatPassword && !tel && !coords.address) {
 			setError(true)
 			setLoading(false)
 			setVisible(true)
@@ -54,6 +61,11 @@ export default function SignUp() {
 			tel,
 			email,
 			password,
+			coords: {
+				address: coords.address,
+				lat: coords.lat,
+				lng: coords.lng,
+			},
 		}
 
 		setLoading(true)
@@ -152,13 +164,20 @@ export default function SignUp() {
 				onChangeText={(text) => setRepeatPassword(text)}
 				autoCapitalize='none'
 			/>
+			<TouchableOpacity
+				style={styles.address}
+				mode='outlined'
+				onPress={(text) => navigation.navigate('googleSearchScreen')}>
+				<Text style={{ color: colors.primary }}>{coords?.address ? coords?.address : 'Set Address'}</Text>
+			</TouchableOpacity>
+
 			<Button
 				mode='contained'
 				disabled={loading}
 				color={colors.green}
 				style={styles.btn}
 				loading={loading}
-				onPress={saveUserHandler}>
+				onPress={() => saveUserHandler()}>
 				Sign Up
 			</Button>
 			<TextCustom>
@@ -179,5 +198,11 @@ const styles = StyleSheet.create({
 	},
 	btn: {
 		marginVertical: 10,
+	},
+	address: {
+		marginTop: 10,
+		borderWidth: 1,
+		padding: 10,
+		borderColor: '#888',
 	},
 })

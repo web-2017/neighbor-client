@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import { Subheading, Title } from 'react-native-paper'
+import { Subheading, Title, Chip, Colors, useTheme, Button } from 'react-native-paper'
+import { useSelector, useDispatch } from 'react-redux'
 
 import { BASE_URL } from '../api'
 import PostItem from '../components/PostItem'
@@ -9,6 +10,9 @@ import { UserContext } from '../store/context'
 export default function Posts({ navigation, params }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [posts, setPosts] = useState([])
+	const { colors } = useTheme()
+	const { user, isLoading } = useSelector((state) => state)
+	// console.log('user', user)
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
@@ -22,7 +26,6 @@ export default function Posts({ navigation, params }) {
 				.then((json) => json.json())
 				.then((data) => {
 					setPosts(data)
-					// console.log('data', posts)
 				})
 				.catch((err) => console.log(err))
 		})
@@ -30,9 +33,11 @@ export default function Posts({ navigation, params }) {
 	}, [navigation])
 
 	return (
-		<ScrollView style={styles.container}>
-			<View>
-				<Subheading>{posts && posts.length} Posts </Subheading>
+		<ScrollView contentContainerStyle={styles.container}>
+			<Chip mode='flat' icon='information' style={{ padding: 10, marginBottom: 10 }}>
+				{posts && posts.length} Posts
+			</Chip>
+			<View style={styles.container}>
 				{posts.length ? (
 					posts?.map((elem) => (
 						<PostItem
@@ -45,15 +50,38 @@ export default function Posts({ navigation, params }) {
 						/>
 					))
 				) : (
-					<Text>You don't have any posts</Text>
+					<Text>You don't have any posts yet</Text>
 				)}
+				<View
+					style={{
+						...styles.button,
+						flexDirection: 'row',
+					}}>
+					<Button
+						icon='plus'
+						style={{
+							backgroundColor: colors.blue,
+							flexGrow: 1,
+						}}
+						mode='contained'
+						dark={true}
+						onPress={() => navigation.navigate('create')}>
+						Add Post
+					</Button>
+				</View>
 			</View>
 		</ScrollView>
 	)
 }
-
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 30,
+		marginHorizontal: 15,
+		flexGrow: 1,
+	},
+	button: {
+		position: 'absolute',
+		left: 0,
+		bottom: 0,
+		marginBottom: 10,
 	},
 })
