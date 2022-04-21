@@ -33,11 +33,11 @@ function BottomTabNavigation() {
 					}}
 				/>
 				<Tab.Screen
-					name='posts'
+					name='My Ads'
 					component={PostNavigation}
 					options={{
 						headerShown: false,
-						tabBarLabel: 'posts',
+						// tabBarLabel: 'posts',
 						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
 					}}
 				/>

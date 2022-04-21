@@ -8,7 +8,6 @@ import MarkerContent from './MarkerContent'
 import { UserContext } from '../store/context'
 
 export default function MarkerComponent({ coords, index }) {
-	console.log('coords', coords)
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
 

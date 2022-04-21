@@ -12,6 +12,7 @@ export default function PostItem({
 	post,
 }) {
 	const navigation = useNavigation()
+	// console.log('post', title)
 	/**
 	 * @function isImageExist - check if image exist, if not set default pic
 	 * @param  {Array} url - List avatars

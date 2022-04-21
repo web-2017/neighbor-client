@@ -11,11 +11,9 @@ import { UserContext } from '../store/context'
 
 export default function Profile({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
-	const { user } = useSelector((state) => state)
-	const [address, setAddress] = useState(null)
-	const [location, setLocation] = useState([])
-	const [loading, setLoading] = useState(false)
+
 	const [errorMsg, setErrorMsg] = useState(null)
+	const [user, setUser] = useState(null)
 
 	const { colors } = useTheme()
 
@@ -26,11 +24,6 @@ export default function Profile({ navigation }) {
 				setErrorMsg('Permission to access location was denied')
 				return
 			}
-
-			let location = await Location.getCurrentPositionAsync({})
-			// console.log(location)
-			setLocation(location)
-			saveStoreData('userLocation', JSON.stringify(location))
 		})()
 	}, [])
 
@@ -45,9 +38,9 @@ export default function Profile({ navigation }) {
 			})
 				.then((jsonData) => jsonData.json())
 				.then((data) => {
-					setAddress(data.user)
-					saveStoreData('user', { _id: user._id, token: user.token, user: data.user }) //set AsyncStorage data
-					setStateUser({ _id: user._id, token: user.token, user: data.user }) // set UserContext
+					setUser(data.user)
+					// saveStoreData('user', { _id: data._id, token: stateUser.token, user: data.user }) //set AsyncStorage data
+					// setStateUser({ _id: stateUser._id, token: stateUser.token, user: data.user }) // set UserContext
 				})
 		})
 
@@ -58,28 +51,18 @@ export default function Profile({ navigation }) {
 		<View style={styles.container}>
 			{/* <Title style={{ textAlign: 'center' }}>My info</Title> */}
 			<Paragraph>
-				Name: {address?.firstName} {address?.lastName}
+				Name: {user?.firstName} {user?.lastName}
 			</Paragraph>
-			<Paragraph>
-				Nickname: {address?.nickname} {address?.lastName}
-			</Paragraph>
-			<Paragraph>Email: {address?.email}</Paragraph>
-			<Paragraph>Tel: + {address?.tel}</Paragraph>
-			<Paragraph>Address: {address?.coords?.address}</Paragraph>
+			<Paragraph>Nickname: {user?.nickname}</Paragraph>
+			<Paragraph>Email: {user?.email}</Paragraph>
+			<Paragraph>Tel: + {user?.tel}</Paragraph>
+			<Paragraph>Address: {user?.coords?.address}</Paragraph>
 			<Button
 				color={colors.blue}
 				mode='contained'
 				icon={() => <AntDesign name='edit' size={24} color={colors.primary} />}
-				onPress={() => navigation.navigate({ name: 'user', params: user })}>
+				onPress={() => navigation.navigate({ name: 'user', params: { user: user } })}>
 				edit
-			</Button>
-			<Button
-				color={colors.accent}
-				style={{ marginVertical: 10 }}
-				mode='contained'
-				icon={() => <AntDesign name='filetext1' size={24} color={colors.primary} />}
-				onPress={() => navigation.navigate('posts')}>
-				My ads
 			</Button>
 		</View>
 	)

@@ -13,13 +13,10 @@ export default function Create({ navigation, route }) {
 	const { colors } = useTheme()
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const isFocused = useIsFocused()
-	const { user, isLoading } = useSelector((state) => state)
-	console.log('user11', user)
 
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('0')
 	const [description, setDescription] = useState('')
-	const [address, setAddress] = useState('')
 	const [photo, setPhoto] = useState('')
 	const [imgPath, setImgPath] = useState(null)
 	const [isVisible, setIsVisible] = useState(false)
@@ -140,7 +137,7 @@ export default function Create({ navigation, route }) {
 				setPrice('')
 				setDescription('')
 				setTitle('')
-				navigation.navigate('posts')
+				navigation.goBack()
 			} else {
 				setLoading(false)
 			}
@@ -193,16 +190,7 @@ export default function Create({ navigation, route }) {
 					placeholder='description'
 					value={description}
 					onChangeText={(text) => setDescription(text)}
-				/>
-				<TextInput
-					mode='contained'
-					placeholder='Address'
-					value={address}
-					onChangeText={(text) => setAddress(text)}
-					onPressIn={() =>
-						navigation.navigate('googleSearchLocation', { userId: stateUser._id, token: stateUser.token })
-					}
-					disabled
+					multiline
 				/>
 
 				{photo ? (

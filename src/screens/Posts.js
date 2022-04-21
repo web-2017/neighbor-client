@@ -12,7 +12,6 @@ export default function Posts({ navigation, params }) {
 	const [posts, setPosts] = useState([])
 	const { colors } = useTheme()
 	const { user, isLoading } = useSelector((state) => state)
-	// console.log('user', user)
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
@@ -25,6 +24,7 @@ export default function Posts({ navigation, params }) {
 			})
 				.then((json) => json.json())
 				.then((data) => {
+					console.log('my-posts', data)
 					setPosts(data)
 				})
 				.catch((err) => console.log(err))
@@ -39,16 +39,19 @@ export default function Posts({ navigation, params }) {
 			</Chip>
 			<View style={styles.container}>
 				{posts.length ? (
-					posts?.map((elem) => (
-						<PostItem
-							postId={elem?._id}
-							uri={elem?.images}
-							title={elem?.title}
-							description={elem?.description}
-							key={elem._id}
-							post={elem}
-						/>
-					))
+					posts?.map((elem) => {
+						// console.log('posts', posts)
+						return (
+							<PostItem
+								postId={elem?._id}
+								uri={elem?.images}
+								title={elem?.title}
+								description={elem?.description}
+								key={elem._id}
+								post={elem}
+							/>
+						)
+					})
 				) : (
 					<Text>You don't have any posts yet</Text>
 				)}

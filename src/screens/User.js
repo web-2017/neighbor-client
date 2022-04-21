@@ -9,6 +9,7 @@ import { UserContext } from '../store/context'
 export default function User({ route, navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const { user } = route?.params
+
 	const { colors } = useTheme()
 
 	const [email, setEmail] = useState('')
@@ -17,13 +18,13 @@ export default function User({ route, navigation }) {
 	const [nickname, setNickname] = useState('')
 	const [tel, setTel] = useState('')
 	const [loading, setLoading] = useState(false)
+
 	useEffect(() => {
 		setEmail(user?.email)
 		setFirstName(user?.firstName)
 		setLastName(user?.lastName)
 		setNickname(user?.nickname)
-		setNickname(user?.address)
-		setTel(user.tel)
+		setTel(user?.tel)
 	}, [route?.params])
 
 	const saveUserHandler = () => {
@@ -36,11 +37,11 @@ export default function User({ route, navigation }) {
 		}
 		setLoading(true)
 
-		fetch(`${BASE_URL}/user/${route?.params?._id}`, {
+		fetch(`${BASE_URL}/user/${user?._id}`, {
 			method: 'put',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${route?.params?.token}`,
+				Authorization: `Bearer ${stateUser?.token}`,
 			},
 			body: JSON.stringify(obj),
 		})
@@ -59,10 +60,10 @@ export default function User({ route, navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<Title>Edit user info {user.firstName}</Title>
+			<Title>Edit user info {user?.firstName}</Title>
 			<TextInput
 				label={'first name'}
-				defaultValue={user.firstName}
+				defaultValue={user?.firstName}
 				mode='outlined'
 				dense
 				clearButtonMode='always'
@@ -70,7 +71,7 @@ export default function User({ route, navigation }) {
 			/>
 			<TextInput
 				label={'last name'}
-				defaultValue={user.lastName}
+				defaultValue={user?.lastName}
 				mode='outlined'
 				dense
 				clearButtonMode='always'
@@ -80,21 +81,21 @@ export default function User({ route, navigation }) {
 				dense
 				mode='outlined'
 				placeholder='nickname'
-				defaultValue={user.nickname}
+				defaultValue={user?.nickname}
 				onChangeText={(text) => setNickname(text)}
 			/>
 			<TextInput
 				dense
 				mode='outlined'
 				placeholder='tel*'
-				defaultValue={user.tel}
+				defaultValue={user?.tel}
 				onChangeText={(text) => setTel(text)}
 			/>
 			<TextInput
 				dense
 				mode='outlined'
 				placeholder='email*'
-				defaultValue={user.email}
+				defaultValue={user?.email}
 				onChangeText={(text) => setEmail(text)}
 				autoCapitalize='none'
 			/>

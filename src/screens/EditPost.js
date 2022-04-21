@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, StyleSheet, Image, ScrollView } from 'react-native'
 import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
 
 import { BASE_URL } from '../api'
 import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
+import { UserContext } from '../store/context'
 
 export default function EditPost({ navigation, route }) {
 	const { post } = route.params
 	const { colors } = useTheme()
+	const [stateUser, setStateUser] = useContext(UserContext)
 
 	const [title, setTitle] = useState('')
 	const [price, setPrice] = useState('0')
@@ -21,7 +23,7 @@ export default function EditPost({ navigation, route }) {
 	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		console.log('post', post)
+		// console.log('post', post)
 		if (post) {
 			setTitle(post?.title)
 			setPrice(post?.price.toString())
@@ -114,7 +116,7 @@ export default function EditPost({ navigation, route }) {
 
 			const data = await response.json()
 
-			console.log('updated Post', data)
+			// console.log('updated Post', data)
 
 			if (response.status === 200) {
 				setIsError(false)
@@ -122,7 +124,7 @@ export default function EditPost({ navigation, route }) {
 				setIsVisible(true)
 				setMessage('Updated post success!')
 				setImgPath(null)
-				navigation.navigate('allposts')
+				navigation.goBack()
 			} else {
 				setLoading(false)
 			}

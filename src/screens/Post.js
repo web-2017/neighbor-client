@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native'
 import { Button, Caption, Paragraph, Title, useTheme } from 'react-native-paper'
-import Carousel from 'react-native-snap-carousel'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -50,26 +49,6 @@ export default function Post({ route, navigation }) {
 		return date
 	}
 
-	const editPostHandler = async () => {
-		setIsEdit(true)
-		try {
-			if (response.status === 200) {
-				setIsError(false)
-				setLoading(false)
-				setIsVisible(true)
-				setMessage('New post created!')
-			} else {
-				setLoading(false)
-			}
-		} catch (err) {
-			setIsError(false)
-			setLoading(false)
-			setIsVisible(true)
-			setMessage(err.message)
-			console.error(err)
-		}
-	}
-
 	return (
 		<ScrollView>
 			<View style={styles.imageContainer}>
@@ -85,7 +64,7 @@ export default function Post({ route, navigation }) {
 				<Caption>Created: {formatDate(post.createdAt)}</Caption>
 				<Title>Title: {post?.title}</Title>
 				<Paragraph>Price: {post?.price}</Paragraph>
-				<Paragraph>Address {stateUser?.user?.address}</Paragraph>
+				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
 				<Button
 					// title='Choose Photo'

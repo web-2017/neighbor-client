@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from '@react-navigation/native'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import { TextInput, Button, useTheme, Snackbar } from 'react-native-paper'
 import { useSelector, useDispatch } from 'react-redux'
 import { setUserReducer } from '../store/reducers/userReducer'
@@ -50,9 +50,10 @@ export default function LogIn({ navigation }) {
 			setError(false)
 			setVisible(true)
 			setLoading(false)
-			console.log('data', data)
 			saveStoreData('user', data) // save data to AsyncStorage
 			setStateUser(data) // save UserContext
+
+			// console.log(data)
 
 			dispatch(setUserReducer(data)) // set data to AsyncStorage
 
@@ -60,7 +61,7 @@ export default function LogIn({ navigation }) {
 				setError(false)
 				setMessage('Welcome ' + data.user.firstName)
 
-				navigation.navigate('profile')
+				navigation.navigate('profileNavigator')
 				return
 			} else {
 				setError(true)
@@ -104,16 +105,18 @@ export default function LogIn({ navigation }) {
 				defaultValue={password}
 				onChangeText={(text) => setPassword(text)}
 			/>
-			<Button
-				title='LogIn'
-				mode='contained'
-				color={colors.green}
-				style={styles.btn}
-				loading={loading}
-				onPress={logInHandler}
-				disabled={loading}>
-				LogIn
-			</Button>
+			<TouchableOpacity onPress={() => logInHandler()}>
+				<Button
+					title='LogIn'
+					mode='contained'
+					color={colors.green}
+					style={styles.btn}
+					loading={loading}
+					disabled={loading}>
+					LogIn
+				</Button>
+			</TouchableOpacity>
+
 			<TextCustom>
 				Don't have an account yet?{' '}
 				<Link style={{ color: colors.alert, fontWeight: '600' }} to={{ screen: 'signup' }}>

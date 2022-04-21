@@ -12,7 +12,7 @@ const Stack = createStackNavigator()
 export default function PostNavigation() {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name='allposts' component={Posts} options={{ headerShown: true, title: 'Posts' }} />
+			<Stack.Screen name='allposts' component={Posts} options={{ headerShown: true, title: 'My Posts' }} />
 			<Stack.Screen name='create' component={Create} options={{ headerShown: true, title: 'Create Post' }} />
 			<Stack.Screen name='post' component={Post} options={{ headerShown: true }} />
 			<Stack.Group screenOptions={{ presentation: 'modal' }}>
