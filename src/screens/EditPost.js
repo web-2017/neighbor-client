@@ -86,7 +86,7 @@ export default function EditPost({ navigation, route }) {
 		})
 			.then((response) => response.json())
 			.then((response) => {
-				console.log('response data', response)
+				// console.log('response data', response)
 				setImgPath(response.uri)
 				setLoading(false)
 			})

@@ -24,7 +24,7 @@ export default function Posts({ navigation, params }) {
 			})
 				.then((json) => json.json())
 				.then((data) => {
-					console.log('my-posts', data)
+					// console.log('my-posts', data)
 					setPosts(data)
 				})
 				.catch((err) => console.log(err))
@@ -33,52 +33,54 @@ export default function Posts({ navigation, params }) {
 	}, [navigation])
 
 	return (
-		<ScrollView contentContainerStyle={styles.container}>
+		<View style={{ flex: 1 }}>
 			<Chip mode='flat' icon='information' style={{ padding: 10, marginBottom: 10 }}>
 				{posts && posts.length} Posts
 			</Chip>
-			<View style={styles.container}>
-				{posts.length ? (
-					posts?.map((elem) => {
-						// console.log('posts', posts)
-						return (
-							<PostItem
-								postId={elem?._id}
-								uri={elem?.images}
-								title={elem?.title}
-								description={elem?.description}
-								key={elem._id}
-								post={elem}
-							/>
-						)
-					})
-				) : (
-					<Text>You don't have any posts yet</Text>
-				)}
-				<View
-					style={{
-						...styles.button,
-						flexDirection: 'row',
-					}}>
-					<Button
-						icon='plus'
+			<ScrollView contentContainerStyle={styles.container}>
+				<View style={styles.container}>
+					{posts.length ? (
+						posts?.map((elem) => {
+							// console.log('posts', posts)
+							return (
+								<PostItem
+									postId={elem?._id}
+									uri={elem?.images}
+									title={elem?.title}
+									description={elem?.description}
+									key={elem._id}
+									post={elem}
+								/>
+							)
+						})
+					) : (
+						<Text>You don't have any posts yet</Text>
+					)}
+					<View
 						style={{
-							backgroundColor: colors.blue,
-							flexGrow: 1,
-						}}
-						mode='contained'
-						dark={true}
-						onPress={() => navigation.navigate('create')}>
-						Add Post
-					</Button>
+							...styles.button,
+							flexDirection: 'row',
+						}}>
+						<Button
+							icon='plus'
+							style={{
+								backgroundColor: colors.blue,
+								flexGrow: 1,
+							}}
+							mode='contained'
+							dark={true}
+							onPress={() => navigation.navigate('create')}>
+							Add Post
+						</Button>
+					</View>
 				</View>
-			</View>
-		</ScrollView>
+			</ScrollView>
+		</View>
 	)
 }
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: 15,
+		marginHorizontal: 5,
 		flexGrow: 1,
 	},
 	button: {

@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps'
 import * as Location from 'expo-location'
-import { View, Text, TextInput, Dimensions, StyleSheet, TouchableOpacity, Alert, Permissions } from 'react-native'
+import { Card, Paragraph, Title, Avatar, Button } from 'react-native-paper'
+import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
-
-const latitudeDelta = 0.025
-const longitudeDelta = 0.05
+import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
 const initialCoords = {
 	lat: 42.03508453490926,
@@ -20,9 +19,11 @@ const initialCoords = {
 export default function Map({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [paddingStyle, setPadding] = useState(0) // show showMyLocation button
-	const [coords, setCoords] = useState([initialCoords])
 	const [region, setRegion] = useState(initialCoords)
+	const [posts, setPosts] = useState([])
 	const [errorMsg, setErrorMsg] = useState(null)
+
+	// console.log('stateUser', stateUser)
 
 	const mapRef = useRef()
 
@@ -40,17 +41,24 @@ export default function Map({ navigation }) {
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
-			fetch(`${BASE_URL}/all-posts`, {
+			fetch(`${BASE_URL}/posts`, {
 				method: 'get',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${stateUser?.token}`,
+				},
 			})
 				.then((json) => json.json())
 				.then((data) => {
-					console.log('newPosts', data)
-					const newCoords = data?.map((x) => {
-						return x.postedBy.coords
-					})
-					setCoords(newCoords)
-					// console.log('map data', newCoords)
+					// get all coords
+					// const newCoords = data?.map((x) => x.postedBy.coords)
+					// setCoords(newCoords)
+
+					setPosts(data) // all posts
+
+					// get user coords for initial region
+					const getUserInitialCoords = data.filter((elem) => elem.postedBy._id === stateUser._id)
+					setRegion(getUserInitialCoords.coords)
 				})
 				.catch((err) => console.log(err))
 		})
@@ -61,34 +69,37 @@ export default function Map({ navigation }) {
 		<View style={{ flex: 1 }}>
 			<MapView
 				ref={mapRef}
-				provider={PROVIDER_GOOGLE}
+				// provider={PROVIDER_GOOGLE}
 				userInterfaceStyle='dark'
-				initialRegion={{
-					latitude: region.lat,
-					longitude: region.lng,
-					latitudeDelta: region.latitudeDelta,
-					longitudeDelta: region.longitudeDelta,
+				region={{
+					// latitude: 42.0428291,
+					// longitude: -87.8599282,
+					latitude: stateUser?._id ? +stateUser?.user?.coords?.lat : +initialCoords.lat,
+					longitude: stateUser?._id ? +stateUser?.user?.coords?.lng : +initialCoords.lng,
+					latitudeDelta: initialCoords.longitudeDelta,
+					longitudeDelta: initialCoords.longitudeDelta,
 				}}
-				showsUserLocation={true}
-				// zoomEnabled={true}
-				showsMyLocationButton={true}
 				style={{
 					...StyleSheet.absoluteFillObject,
 					paddingBottom: paddingStyle,
 				}}
-				// animateToRegion={{
-				// 	region: { latitude: 37.78825, longitude: -122.4324, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
-				// 	duration: 300,
-				// }}
+				animateToRegion={{
+					region: { latitude: region?.lat, longitude: region?.lng, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
+					duration: 300,
+				}}
 				zoomEnabled={true}
 				zoomControlEnabled={true}
 				scrollEnabled={true}
+				zoomTapEnabled={true}
+				showsMyLocationButton={true}
 				loadingEnabled
 				onMapReady={() => {
 					console.log('Map ready')
 					setPadding(100)
 				}}>
-				{coords && coords.map((coords, index) => <MarkerComponent key={index} coords={coords} />)}
+				{posts?.map((post, index) => (
+					<MarkerComponent key={index} post={post} />
+				))}
 			</MapView>
 		</View>
 	)
@@ -100,6 +111,7 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
+		zIndex: 10,
 	},
 	map: {
 		width: Dimensions.get('window').width,
@@ -108,5 +120,18 @@ const styles = StyleSheet.create({
 	mapStyle: {
 		flex: 1,
 		marginLeft: 3,
+	},
+	carousel: {
+		position: 'absolute',
+		// bottom: Platform.OS === 'ios' ? 90 : 80,
+		bottom: 10,
+		paddingHorizontal: 10,
+		borderWidth: 1,
+	},
+	carouselItem: {
+		// flexDirection: 'row',
+		borderRadius: 20,
+		marginHorizontal: 20,
+		backgroundColor: '#fff',
 	},
 })

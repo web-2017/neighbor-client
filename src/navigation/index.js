@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import ProfileNavigation from './ProfileNavigation'
 import Home from '../screens/Home'
 import PostNavigation from './PostNavigation'
+import HomeNavigation from './HomeNavigation'
 
 export const Tab = createBottomTabNavigator()
 
@@ -25,7 +26,7 @@ function BottomTabNavigation() {
 				}}>
 				<Tab.Screen
 					name='home'
-					component={Home}
+					component={HomeNavigation}
 					options={{
 						tabBarLabel: 'Home',
 						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='home' color={color} size={20} />,

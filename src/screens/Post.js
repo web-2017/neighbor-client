@@ -7,7 +7,7 @@ import { UserContext } from '../store/context'
 import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
 
 export default function Post({ route, navigation }) {
-	const { postId } = route.params
+	const { postId, postedBy } = route.params
 	const { colors } = useTheme()
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [post, setPost] = useState('')
@@ -15,6 +15,9 @@ export default function Post({ route, navigation }) {
 	const [isEdit, setIsEdit] = useState(false)
 	const [isError, setIsError] = useState(false)
 	const [message, setMessage] = useState('')
+
+	console.log('stateUser', stateUser?._id)
+	console.log('postedBy', route.params)
 
 	useEffect(() => {
 		if (postId) {
@@ -66,16 +69,18 @@ export default function Post({ route, navigation }) {
 				<Paragraph>Price: {post?.price}</Paragraph>
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
-				<Button
-					// title='Choose Photo'
-					icon={'pencil'}
-					onPress={() => navigation.navigate('editPost', { post })}
-					mode='contained'
-					color={colors.primary}
-					loading={loading}
-					style={{ marginVertical: 20 }}>
-					Edit Post
-				</Button>
+				{stateUser?._id === postedBy && (
+					<Button
+						// title='Choose Photo'
+						icon={'pencil'}
+						onPress={() => navigation.navigate('editPost', { post })}
+						mode='contained'
+						color={colors.primary}
+						loading={loading}
+						style={{ marginVertical: 20 }}>
+						Edit Post
+					</Button>
+				)}
 			</View>
 		</ScrollView>
 	)

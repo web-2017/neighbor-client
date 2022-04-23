@@ -7,24 +7,25 @@ import { useNavigation } from '@react-navigation/native'
 const screen = Dimensions.get('screen')
 const date = new Date().toLocaleDateString('en-US')
 
-export default function MarkerContent({ user }) {
+export default function MarkerContent({ post }) {
 	const navigation = useNavigation()
-
-	// console.log(user)
-
 	return (
-		<Callout style={styles.callout} onPress={() => navigation.navigate('post', user)}>
-			<Text style={styles.title}>Hello there</Text>
+		<Callout
+			style={styles.callout}
+			onPress={() => {
+				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
+			}}>
+			<Text style={styles.title}>Hello there {post?.price}</Text>
 			<Divider />
 
 			<View style={styles.calloutContainer}>
 				<View>
 					<Paragraph style={styles.text}>Title: Sell iPhone 12</Paragraph>
 					<Text style={styles.text}>Date: {date}</Text>
-					<Paragraph style={styles.text}>
+					<Paragraph style={{ ...styles.text }}>
 						Price: <Text style={{ fontWeight: '600' }}>400$</Text>
 					</Paragraph>
-					<Button onPress={() => console.log(11)} compact style={{ marginTop: 10 }} mode='outlined'>
+					<Button compact style={{ marginTop: 10 }} mode='outlined'>
 						More...
 					</Button>
 				</View>
