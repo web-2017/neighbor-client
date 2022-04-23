@@ -1,13 +1,14 @@
 import React from 'react'
 import { Alert, Image, View, Text, Dimensions, StyleSheet } from 'react-native'
 import { Callout } from 'react-native-maps'
-import { Paragraph, Avatar, Divider, Button } from 'react-native-paper'
+import { Paragraph, Avatar, Divider, Button, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 
 const screen = Dimensions.get('screen')
 const date = new Date().toLocaleDateString('en-US')
 
 export default function MarkerContent({ post }) {
+	const { colors } = useTheme()
 	const navigation = useNavigation()
 	return (
 		<Callout
@@ -15,7 +16,7 @@ export default function MarkerContent({ post }) {
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>Hello there {post?.price}</Text>
+			<Text style={styles.title}>{post?.postedBy?.nickname}</Text>
 			<Divider />
 
 			<View style={styles.calloutContainer}>
@@ -25,7 +26,7 @@ export default function MarkerContent({ post }) {
 					<Paragraph style={{ ...styles.text }}>
 						Price: <Text style={{ fontWeight: '600' }}>400$</Text>
 					</Paragraph>
-					<Button compact style={{ marginTop: 10 }} mode='outlined'>
+					<Button color={colors.brown} compact style={{ marginTop: 10 }} mode='contained'>
 						More...
 					</Button>
 				</View>
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
 	callout: {
 		width: screen.width / 1.3,
 		borderRadius: 12,
+		backgroundColor: '#ccc9',
 	},
 	title: {
 		fontSize: 16,
