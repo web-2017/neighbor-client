@@ -4,14 +4,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { NavigationContainer } from '@react-navigation/native'
 
 import ProfileNavigation from './ProfileNavigation'
-import Home from '../screens/Home'
 import PostNavigation from './PostNavigation'
 import HomeNavigation from './HomeNavigation'
+import { useContext } from 'react'
+import { UserContext } from '../store/context'
 
 export const Tab = createBottomTabNavigator()
 
 function BottomTabNavigation() {
 	const { colors } = useTheme()
+	const [stateUser, setStateUser] = useContext(UserContext)
 
 	return (
 		<NavigationContainer>
@@ -33,20 +35,22 @@ function BottomTabNavigation() {
 						headerShown: false,
 					}}
 				/>
+				{stateUser?._id && (
+					<Tab.Screen
+						name='ads'
+						component={PostNavigation}
+						options={{
+							headerShown: false,
+							tabBarLabel: 'My Ads',
+							tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
+						}}
+					/>
+				)}
 				<Tab.Screen
-					name='My Ads'
-					component={PostNavigation}
-					options={{
-						headerShown: false,
-						// tabBarLabel: 'posts',
-						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
-					}}
-				/>
-				<Tab.Screen
-					name='Profile'
+					name='profile'
 					component={ProfileNavigation}
 					options={{
-						tabBarLabel: 'Profile',
+						tabBarLabel: !stateUser?._id ? 'LogIn' : 'Profile',
 						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='account' color={color} size={20} />,
 					}}
 				/>

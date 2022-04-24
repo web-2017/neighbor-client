@@ -1,8 +1,12 @@
 import React from 'react'
 import { Alert, Image, View, Text, Dimensions, StyleSheet } from 'react-native'
-import { Callout } from 'react-native-maps'
+import { Callout, PROVIDER_GOOGLE } from 'react-native-maps'
+
 import { Paragraph, Avatar, Divider, Button, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
+
+import { BASE_URL } from '../api'
+import { isImageExist } from '../utils/filters/uploadImageFilter'
 
 const screen = Dimensions.get('screen')
 const date = new Date().toLocaleDateString('en-US')
@@ -16,15 +20,15 @@ export default function MarkerContent({ post }) {
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>{post?.postedBy?.nickname}</Text>
+			<Text style={styles.title}>{post?.title}</Text>
 			<Divider />
 
 			<View style={styles.calloutContainer}>
 				<View>
-					<Paragraph style={styles.text}>Title: Sell iPhone 12</Paragraph>
+					<Paragraph></Paragraph>
 					<Text style={styles.text}>Date: {date}</Text>
 					<Paragraph style={{ ...styles.text }}>
-						Price: <Text style={{ fontWeight: '600' }}>400$</Text>
+						Price: <Text style={{ fontWeight: '600' }}>{post?.price} $</Text>
 					</Paragraph>
 					<Button color={colors.brown} compact style={{ marginTop: 10 }} mode='contained'>
 						More...
@@ -32,10 +36,7 @@ export default function MarkerContent({ post }) {
 				</View>
 				<View>
 					{/* <Avatar.Text size={55} label={'JD'} /> */}
-					<Avatar.Image
-						size={125}
-						source={{ uri: 'https://icdn.digitaltrends.com/image/digitaltrends/iphone-12-mini-black-back-in-hand.jpg' }}
-					/>
+					<Avatar.Image size={125} source={{ uri: isImageExist(post?.images) }} />
 				</View>
 			</View>
 		</Callout>
@@ -45,8 +46,10 @@ export default function MarkerContent({ post }) {
 const styles = StyleSheet.create({
 	callout: {
 		width: screen.width / 1.3,
+		maxWidth: 300,
+		overflow: 'hidden',
 		borderRadius: 12,
-		backgroundColor: '#ccc9',
+		backgroundColor: '#fff',
 	},
 	title: {
 		fontSize: 16,

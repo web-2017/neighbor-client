@@ -3,7 +3,7 @@ import { List, Avatar, Divider, Card, Title, Paragraph, Button } from 'react-nat
 import { useNavigation } from '@react-navigation/native'
 
 import { BASE_URL } from '../api'
-import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
+import { isImageExist } from '../utils/filters/uploadImageFilter'
 export default function PostItem({
 	title = 'Title',
 	description = 'Item description',
@@ -13,13 +13,6 @@ export default function PostItem({
 }) {
 	const navigation = useNavigation()
 	// console.log('post', title)
-	/**
-	 * @function isImageExist - check if image exist, if not set default pic
-	 * @param  {Array} url - List avatars
-	 */
-	const isImageExist = (url) => {
-		return url ? uploadImageFilter(`${BASE_URL}/${url[0]}`) : 'https://robohash.org/robert'
-	}
 
 	const LeftContent = (props) => <Avatar.Icon {...props} icon='folder' />
 	return (

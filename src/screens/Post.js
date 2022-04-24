@@ -12,12 +12,9 @@ export default function Post({ route, navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
-	const [isEdit, setIsEdit] = useState(false)
-	const [isError, setIsError] = useState(false)
-	const [message, setMessage] = useState('')
 
-	console.log('stateUser', stateUser?._id)
-	console.log('postedBy', route.params)
+	// console.log('stateUser', stateUser?._id)
+	// console.log('postedBy', route.params)
 
 	useEffect(() => {
 		if (postId) {
@@ -69,7 +66,7 @@ export default function Post({ route, navigation }) {
 				<Paragraph>Price: {post?.price}</Paragraph>
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
-				{stateUser?._id === postedBy && (
+				{stateUser?._id === post?.postedBy && (
 					<Button
 						// title='Choose Photo'
 						icon={'pencil'}
