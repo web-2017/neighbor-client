@@ -3,6 +3,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
 import { View, Dimensions, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
+import { useTheme } from 'react-native-paper'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -21,6 +22,7 @@ export default function Map({ navigation }) {
 	const [region, setRegion] = useState(initialCoords)
 	const [posts, setPosts] = useState([])
 	const [errorMsg, setErrorMsg] = useState(null)
+	const { colors } = useTheme()
 
 	// console.log('stateUser', stateUser)
 
@@ -77,7 +79,14 @@ export default function Map({ navigation }) {
 		return unsubscribe
 	}, [navigation])
 
-	const getCurrentLocation = () => {}
+	const getCurrentLocation = async () => {
+		try {
+			let location = await Location.getCurrentPositionAsync({})
+			setRegion({ lat: location?.coords?.latitude, lng: location?.coords.longitude })
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	return (
 		<View style={{ flex: 1 }}>
