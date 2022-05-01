@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
-import { View, Dimensions, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { View, Dimensions, StyleSheet, TouchableOpacity, Alert, Text } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import { useTheme } from 'react-native-paper'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
+import ZoomControl from './ZoomControl'
+import NavigationButton from './NavigationButton'
 
 const initialCoords = {
 	lat: 42.03508453490926,
@@ -22,6 +24,7 @@ export default function Map({ navigation }) {
 	const [region, setRegion] = useState(initialCoords)
 	const [posts, setPosts] = useState([])
 	const [errorMsg, setErrorMsg] = useState(null)
+	const [mapZoom, setMapZoom] = useState(0.03)
 	const { colors } = useTheme()
 
 	// console.log('stateUser', stateUser)
@@ -82,7 +85,12 @@ export default function Map({ navigation }) {
 	const getCurrentLocation = async () => {
 		try {
 			let location = await Location.getCurrentPositionAsync({})
-			setRegion({ lat: location?.coords?.latitude, lng: location?.coords.longitude })
+			// console.log(location)
+			setRegion({
+				lat: location?.coords?.latitude,
+				lng: location?.coords.longitude,
+			})
+			setMapZoom(0.03)
 		} catch (err) {
 			console.log(err)
 		}
@@ -97,7 +105,7 @@ export default function Map({ navigation }) {
 				region={{
 					latitude: stateUser?._id ? stateUser?.user?.coords?.lat : region?.lat,
 					longitude: stateUser?._id ? stateUser?.user?.coords?.lng : region?.lng,
-					latitudeDelta: initialCoords.longitudeDelta,
+					latitudeDelta: mapZoom,
 					longitudeDelta: initialCoords.longitudeDelta,
 				}}
 				style={{
@@ -105,7 +113,7 @@ export default function Map({ navigation }) {
 					paddingBottom: paddingStyle,
 				}}
 				animateToRegion={{
-					region: { latitude: region?.lat, longitude: region?.lng, latitudeDelta: 0.0922, longitudeDelta: 0.0421 },
+					region: { latitude: region?.lat, longitude: region?.lng, latitudeDelta: 0.03, longitudeDelta: 0.03 },
 					duration: 300,
 				}}
 				zoomEnabled={true}
@@ -117,14 +125,12 @@ export default function Map({ navigation }) {
 					console.log('Map ready')
 					setPadding(100)
 				}}>
-				{posts?.map((post, index) => {
-					// const newPost = new Set([post.postedBy?._id])
-					return <MarkerComponent key={index} post={post} />
-				})}
+				{posts?.map((post, index) => (
+					<MarkerComponent key={index} post={post} />
+				))}
 			</MapView>
-			<TouchableOpacity onPress={() => getCurrentLocation()} style={styles.mapNavigationContainer}>
-				<FontAwesome size={40} name='location-arrow' color={'#fff'} />
-			</TouchableOpacity>
+			<NavigationButton getCurrentLocation={getCurrentLocation} />
+			<ZoomControl mapZoom={mapZoom} setMapZoom={setMapZoom} />
 		</View>
 	)
 }
@@ -144,10 +150,5 @@ const styles = StyleSheet.create({
 	mapStyle: {
 		flex: 1,
 		marginLeft: 3,
-	},
-	mapNavigationContainer: {
-		position: 'absolute',
-		bottom: 30,
-		right: 30,
 	},
 })
