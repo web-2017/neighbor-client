@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
-import { View, Dimensions, StyleSheet } from 'react-native'
+import { View, Dimensions, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { FontAwesome } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -38,6 +39,8 @@ export default function Map({ navigation }) {
 
 			if (location) {
 				setRegion({ lat: location?.coords?.latitude, lng: location?.coords.longitude })
+			} else {
+				Alert.alert('Error - current location', 'Please go to setting and turn on location')
 			}
 		})()
 	}, [])
@@ -74,6 +77,8 @@ export default function Map({ navigation }) {
 		return unsubscribe
 	}, [navigation])
 
+	const getCurrentLocation = () => {}
+
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
@@ -108,6 +113,9 @@ export default function Map({ navigation }) {
 					return <MarkerComponent key={index} post={post} />
 				})}
 			</MapView>
+			<TouchableOpacity onPress={() => getCurrentLocation()} style={styles.mapNavigationContainer}>
+				<FontAwesome size={40} name='location-arrow' color={'#fff'} />
+			</TouchableOpacity>
 		</View>
 	)
 }
@@ -127,5 +135,10 @@ const styles = StyleSheet.create({
 	mapStyle: {
 		flex: 1,
 		marginLeft: 3,
+	},
+	mapNavigationContainer: {
+		position: 'absolute',
+		bottom: 30,
+		right: 30,
 	},
 })
