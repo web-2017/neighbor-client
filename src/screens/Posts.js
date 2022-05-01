@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import { Subheading, Title, Chip, Colors, useTheme, Button } from 'react-native-paper'
+import { Subheading, Title, Chip, Colors, useTheme, Button, FAB } from 'react-native-paper'
 import { useSelector, useDispatch } from 'react-redux'
+import { Iconic, FontAwesome } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import PostItem from '../components/PostItem'
@@ -56,25 +57,15 @@ export default function Posts({ navigation, params }) {
 					) : (
 						<Text>You don't have any posts yet</Text>
 					)}
-					<View
-						style={{
-							...styles.button,
-							flexDirection: 'row',
-						}}>
-						<Button
-							icon='plus'
-							style={{
-								backgroundColor: colors.blue,
-								flexGrow: 1,
-							}}
-							mode='contained'
-							dark={true}
-							onPress={() => navigation.navigate('create')}>
-							Add Post
-						</Button>
-					</View>
 				</View>
 			</ScrollView>
+
+			<FAB
+				style={{ ...styles.button, backgroundColor: colors.green }}
+				theme='light'
+				icon='plus'
+				onPress={() => navigation.navigate('create')}
+			/>
 		</View>
 	)
 }
@@ -85,8 +76,8 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		position: 'absolute',
-		left: 0,
+		margin: 16,
+		right: 0,
 		bottom: 0,
-		marginBottom: 10,
 	},
 })

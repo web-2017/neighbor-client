@@ -16,6 +16,19 @@ export default function Post({ route, navigation }) {
 	// console.log('stateUser', stateUser?._id)
 	// console.log('postedBy', route.params)
 
+	const deletePostHandler = (postId) => {
+		console.log('postId', postId)
+		fetch(`${BASE_URL}/post/${postId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${stateUser?.token}`,
+			},
+		})
+			.then((json) => navigation.goBack())
+			.catch((err) => console.log(err))
+	}
+
 	useEffect(() => {
 		if (postId) {
 			;(() => {
@@ -51,7 +64,7 @@ export default function Post({ route, navigation }) {
 
 	return (
 		<ScrollView>
-			<View style={styles.imageContainer}>
+			<View>
 				{post?.images && (
 					<Image
 						style={styles.stretch}
@@ -67,16 +80,28 @@ export default function Post({ route, navigation }) {
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
 				{stateUser?._id === post?.postedBy && (
-					<Button
-						// title='Choose Photo'
-						icon={'pencil'}
-						onPress={() => navigation.navigate('editPost', { post })}
-						mode='contained'
-						color={colors.primary}
-						loading={loading}
-						style={{ marginVertical: 20 }}>
-						Edit Post
-					</Button>
+					<View style={styles.btnContainer}>
+						<Button
+							// title='Choose Photo'
+							icon={'pencil'}
+							onPress={() => navigation.navigate('editPost', { post })}
+							mode='outlined'
+							color={colors.green}
+							loading={loading}
+							style={{ marginVertical: 20 }}>
+							Edit Post
+						</Button>
+						<Button
+							// title='Choose Photo'
+							icon={'delete'}
+							onPress={() => deletePostHandler(postId)}
+							mode='outlined'
+							color={colors.alert}
+							loading={loading}
+							style={{ marginVertical: 20 }}>
+							Delete Post
+						</Button>
+					</View>
 				)}
 			</View>
 		</ScrollView>
@@ -84,7 +109,6 @@ export default function Post({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-	imageContainer: {},
 	container: {
 		margin: 20,
 	},
@@ -92,5 +116,9 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: 200,
 		resizeMode: 'stretch',
+	},
+	btnContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
 	},
 })

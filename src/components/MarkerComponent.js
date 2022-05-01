@@ -10,7 +10,7 @@ import { UserContext } from '../store/context'
 export default function MarkerComponent({ index, post }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
-	// console.log('post', post)
+
 	return (
 		<Marker
 			// onPress={() => Alert.alert('alarm', 'dasfds')}

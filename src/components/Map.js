@@ -58,7 +58,10 @@ export default function Map({ navigation }) {
 					// const newCoords = data?.map((x) => x.postedBy.coords)
 					// setCoords(newCoords)
 					setPosts(data) // all posts
-					console.log('data', data)
+
+					const uniqPost = data.map((elem) => {
+						console.log('uniqPost11')
+					})
 
 					// get user coords for initial region
 					if (stateUser?._id) {
@@ -100,9 +103,10 @@ export default function Map({ navigation }) {
 					console.log('Map ready')
 					setPadding(100)
 				}}>
-				{posts?.map((post, index) => (
-					<MarkerComponent key={index} post={post} />
-				))}
+				{posts?.map((post, index) => {
+					// const newPost = new Set([post.postedBy?._id])
+					return <MarkerComponent key={index} post={post} />
+				})}
 			</MapView>
 		</View>
 	)

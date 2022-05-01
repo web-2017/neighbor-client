@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import { useTheme } from 'react-native-paper'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -6,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import ProfileNavigation from './ProfileNavigation'
 import PostNavigation from './PostNavigation'
 import HomeNavigation from './HomeNavigation'
-import { useContext } from 'react'
+import FavoriteNavigation from './FavoriteNavigation'
 import { UserContext } from '../store/context'
 
 export const Tab = createBottomTabNavigator()
@@ -46,6 +47,14 @@ function BottomTabNavigation() {
 						}}
 					/>
 				)}
+				<Tab.Screen
+					name='favorites'
+					component={FavoriteNavigation}
+					options={{
+						tabBarLabel: 'Favorite',
+						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='heart' color={color} size={20} />,
+					}}
+				/>
 				<Tab.Screen
 					name='profile'
 					component={ProfileNavigation}
