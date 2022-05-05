@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
 import { View, Dimensions, StyleSheet, TouchableOpacity, Alert, Text } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
+
 import { useTheme } from 'react-native-paper'
 
 import { BASE_URL } from '../api'
@@ -10,6 +10,7 @@ import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
 import ZoomControl from './ZoomControl'
 import NavigationButton from './NavigationButton'
+import CarouselMap from './CarouselMap'
 
 const initialCoords = {
 	lat: 42.03508453490926,
@@ -96,6 +97,14 @@ export default function Map({ navigation }) {
 		}
 	}
 
+	const onSwipeUp = (gestureState) => {
+		console.log('onSwipeUp', onSwipeUp)
+	}
+
+	const onSwipeDown = (gestureState) => {
+		console.log('onSwipeDown', onSwipeDown)
+	}
+
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
@@ -131,6 +140,7 @@ export default function Map({ navigation }) {
 			</MapView>
 			<NavigationButton getCurrentLocation={getCurrentLocation} />
 			<ZoomControl mapZoom={mapZoom} setMapZoom={setMapZoom} />
+			<CarouselMap setRegion={setRegion} posts={posts} />
 		</View>
 	)
 }

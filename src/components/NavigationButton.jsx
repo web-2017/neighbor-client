@@ -5,7 +5,7 @@ import { FontAwesome } from '@expo/vector-icons'
 export default function NavigationButton({ getCurrentLocation }) {
 	return (
 		<TouchableOpacity onPress={() => getCurrentLocation()} style={styles.mapNavigationContainer}>
-			<FontAwesome size={40} name='location-arrow' color={'#fff'} />
+			<FontAwesome size={30} name='location-arrow' color={'#fff'} />
 		</TouchableOpacity>
 	)
 }
@@ -13,7 +13,7 @@ export default function NavigationButton({ getCurrentLocation }) {
 const styles = StyleSheet.create({
 	mapNavigationContainer: {
 		position: 'absolute',
-		bottom: 30,
-		right: 30,
+		right: 25,
+		top: 140,
 	},
 })
