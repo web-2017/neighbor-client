@@ -14,10 +14,8 @@ export default function Post({ route, navigation }) {
 	const [loading, setLoading] = useState(false)
 
 	// console.log('stateUser', stateUser?._id)
-	console.log('postedBy', route.params)
 
 	const deletePostHandler = (postId) => {
-		console.log('postId', postId)
 		fetch(`${BASE_URL}/post/${postId}`, {
 			method: 'DELETE',
 			headers: {
@@ -65,12 +63,14 @@ export default function Post({ route, navigation }) {
 	return (
 		<ScrollView>
 			<View>
-				{post?.images && (
+				{post?.images ? (
 					<Image
 						style={styles.stretch}
 						loadingIndicatorSource={post?.images[0]}
 						source={{ uri: `${uploadImageFilter(`${BASE_URL}/${post?.images[0]}`)}` }}
 					/>
+				) : (
+					<Image style={styles.stretch} source={require('../../assets/img.jpg')} />
 				)}
 			</View>
 			<View style={styles.container}>
