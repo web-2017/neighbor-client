@@ -38,7 +38,7 @@ export default function CarouselMap({ posts, setRegion }) {
 
 	return (
 		<Animated.View
-			style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: colors.accent }}>
+			style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: colors.blue }}>
 			<Title
 				style={{ alignSelf: 'center' }}
 				onPress={() => (swipePosition === 0 ? setSwipePositionState(150) : setSwipePositionState(0))}>

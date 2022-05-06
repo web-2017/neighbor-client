@@ -37,6 +37,7 @@ export default function EditPost({ navigation, route }) {
 		}
 	}, [imgPath])
 
+	// *Fix: upload image method if image exist, now, upload new image instead of replace existing image
 	// upload image
 	const handleChoosePhoto = async () => {
 		setLoading(true)
@@ -69,6 +70,7 @@ export default function EditPost({ navigation, route }) {
 		}
 
 		const formData = new FormData()
+
 		formData.append('photo', {
 			name: new Date() + '_photo',
 			type: 'image/jpg',
@@ -114,7 +116,7 @@ export default function EditPost({ navigation, route }) {
 				body: JSON.stringify({ title, price, description, images: imgPath ? imgPath : undefined, postId: post?._id }),
 			})
 
-			const data = await response.json()
+			// const data = await response.json()
 
 			// console.log('updated Post', data)
 
