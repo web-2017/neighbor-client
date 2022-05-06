@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, Fragment } from 'react'
 import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, FlatList } from 'react-native'
-import { Divider, Title, useTheme } from 'react-native-paper'
+import { Button, Divider, Title, useTheme } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons'
 
 import { isImageExist } from '../utils/filters/uploadImageFilter'
 
-export default function CarouselMap({ posts, setRegion }) {
+export default function CarouselMap({ posts, setRegion, navigation }) {
 	const [swipePosition, setSwipePositionState] = useState(150)
 
 	useEffect(() => {
@@ -28,9 +28,20 @@ export default function CarouselMap({ posts, setRegion }) {
 					<Image style={{ height: '100%', width: 100 }} source={{ uri: isImageExist(item?.images) }} />
 				</View>
 				<View style={{ ...styles.carouselContent }}>
-					<Text>{item?.title}</Text>
-					<Text>{item?.price === 0 ? 'Free' : item?.price + '$'}</Text>
-					<Text>{item?.description}</Text>
+					<View>
+						<Text>
+							{item?.title.slice(0, 16)}
+							{item.title.length > 16 && '...'}
+						</Text>
+						<Text>{item?.price === 0 ? 'Free' : item?.price + '$'}</Text>
+						<Text>
+							{item?.description.slice(0, 30)}
+							{item.description.length > 15 && '...'}
+						</Text>
+					</View>
+					<Button mode='outlined' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
+						More...
+					</Button>
 				</View>
 			</TouchableOpacity>
 		)
@@ -77,6 +88,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#ffffffe7',
 	},
 	carouselContent: {
+		flexDirection: 'column',
+		justifyContent: 'space-between',
 		flexShrink: 1,
 		flex: 1.2,
 		padding: 5,

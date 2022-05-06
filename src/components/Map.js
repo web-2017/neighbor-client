@@ -140,7 +140,7 @@ export default function Map({ navigation }) {
 			</MapView>
 			<NavigationButton getCurrentLocation={getCurrentLocation} />
 			<ZoomControl mapZoom={mapZoom} setMapZoom={setMapZoom} />
-			<CarouselMap setRegion={setRegion} posts={posts} />
+			<CarouselMap setRegion={setRegion} posts={posts} navigation={navigation} />
 		</View>
 	)
 }

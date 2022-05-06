@@ -14,7 +14,7 @@ export default function Post({ route, navigation }) {
 	const [loading, setLoading] = useState(false)
 
 	// console.log('stateUser', stateUser?._id)
-	// console.log('postedBy', route.params)
+	console.log('postedBy', route.params)
 
 	const deletePostHandler = (postId) => {
 		console.log('postId', postId)
@@ -74,7 +74,7 @@ export default function Post({ route, navigation }) {
 				)}
 			</View>
 			<View style={styles.container}>
-				<Caption>Created: {formatDate(post.createdAt)}</Caption>
+				<Caption>Created: {formatDate(post?.createdAt)}</Caption>
 				<Title>Title: {post?.title}</Title>
 				<Paragraph>Price: {post?.price}</Paragraph>
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>

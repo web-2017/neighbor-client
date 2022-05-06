@@ -1,8 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import { Subheading, Title, Chip, Colors, useTheme, Button, FAB } from 'react-native-paper'
+import { Subheading, Chip, useTheme, FAB } from 'react-native-paper'
 import { useSelector, useDispatch } from 'react-redux'
-import { Iconic, FontAwesome } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import PostItem from '../components/PostItem'
@@ -12,7 +11,6 @@ export default function Posts({ navigation, params }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [posts, setPosts] = useState([])
 	const { colors } = useTheme()
-	const { user, isLoading } = useSelector((state) => state)
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
@@ -69,6 +67,7 @@ export default function Posts({ navigation, params }) {
 		</View>
 	)
 }
+
 const styles = StyleSheet.create({
 	container: {
 		marginHorizontal: 5,
