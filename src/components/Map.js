@@ -68,10 +68,6 @@ export default function Map({ navigation }) {
 					// setCoords(newCoords)
 					setPosts(data) // all posts
 
-					const uniqPost = data.map((elem) => {
-						console.log('uniqPost11')
-					})
-
 					// get user coords for initial region
 					if (stateUser?._id) {
 						const getUserInitialCoords = data.filter((elem) => elem.postedBy._id === stateUser._id)

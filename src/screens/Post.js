@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native'
-import { Button, Caption, Paragraph, Title, useTheme } from 'react-native-paper'
+import { Button, Caption, Chip, Paragraph, Title, useTheme } from 'react-native-paper'
+import { AntDesign } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -39,7 +40,7 @@ export default function Post({ route, navigation }) {
 				})
 					.then((jsonValue) => jsonValue.json())
 					.then((data) => {
-						console.log('data', data)
+						// console.log('data', data)
 						setPost(data)
 					})
 					.catch((err) => {
@@ -58,6 +59,48 @@ export default function Post({ route, navigation }) {
 		const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }
 		const date = today.toLocaleDateString('en-En', options)
 		return date
+	}
+
+	const addToFavorites = async () => {
+		try {
+			const response = await fetch(`${BASE_URL}/like`, {
+				method: 'put',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${stateUser?.token}`,
+				},
+				body: JSON.stringify({
+					postId: postId,
+				}),
+			})
+
+			const data = await response.json()
+			setPost(data)
+			console.log(data)
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
+	const removeFromFavorites = async () => {
+		try {
+			const response = await fetch(`${BASE_URL}/unlike`, {
+				method: 'put',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${stateUser?.token}`,
+				},
+				body: JSON.stringify({
+					postId: postId,
+				}),
+			})
+
+			const data = await response.json()
+			setPost(data)
+			console.log(data)
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
 	return (
@@ -79,6 +122,17 @@ export default function Post({ route, navigation }) {
 				<Paragraph>Price: {post?.price}</Paragraph>
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
+				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
+					{stateUser?._id !== post?.postedBy && (
+						<View>
+							{post?.likes?.includes(stateUser?._id) ? (
+								<AntDesign name='heart' size={24} color={colors.alert} onPress={() => removeFromFavorites(postId)} />
+							) : (
+								<AntDesign name='hearto' size={24} color={colors.alert} onPress={() => addToFavorites(postId)} />
+							)}
+						</View>
+					)}
+				</View>
 				{stateUser?._id === post?.postedBy && (
 					<View style={styles.btnContainer}>
 						<Button

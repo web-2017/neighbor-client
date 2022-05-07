@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
-import { Subheading, Chip, useTheme, FAB } from 'react-native-paper'
-import { useSelector, useDispatch } from 'react-redux'
+import { Chip, useTheme, FAB } from 'react-native-paper'
 
 import { BASE_URL } from '../api'
 import PostItem from '../components/PostItem'

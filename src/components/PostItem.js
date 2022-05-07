@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native'
-import { List, Avatar, Divider, Card, Title, Paragraph, Button } from 'react-native-paper'
+import { Avatar, Divider, Card, Paragraph, Button } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 
-import { BASE_URL } from '../api'
 import { isImageExist } from '../utils/filters/uploadImageFilter'
+
 export default function PostItem({
 	title = 'Title',
 	description = 'Item description',
@@ -14,29 +13,23 @@ export default function PostItem({
 	const navigation = useNavigation()
 	// console.log('post', title)
 
-	const LeftContent = (props) => <Avatar.Icon {...props} icon='folder' />
+	const LeftContent = (props) => <Avatar.Icon {...props} icon='post' />
+
 	return (
 		<>
-			<Card mode='elevated'>
+			<Card mode='elevated' style={{ marginVertical: 10 }}>
 				<Card.Title title={title} subtitle={post?.price + ' $'} left={LeftContent} />
 				<Card.Content>
 					{/* <Title>{title}</Title> */}
 					<Paragraph>{description}</Paragraph>
 				</Card.Content>
 				<Card.Cover source={{ uri: isImageExist(uri) }} />
-				<Card.Actions>
+				<Card.Actions style={{ justifyContent: 'space-between' }}>
 					<Button onPress={() => navigation.navigate('post', { postId: post?._id })}>Read more</Button>
 				</Card.Actions>
 			</Card>
 
-			{/* <List.Item
-				onPress={() => navigation.navigate('post', { postId: post?._id })}
-				title={title}
-				description={description}
-				left={(props) => <Avatar.Image style={{ alignSelf: 'center' }} size={70} source={{ uri: isImageExist(uri) }} />}
-				right={(props) => <List.Icon {...props} icon='eye' />}
-			/>
-			<Divider />*/}
+			<Divider style={{ marginVertical: 10 }} />
 		</>
 	)
 }
