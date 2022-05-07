@@ -5,7 +5,7 @@ import { Callout, PROVIDER_GOOGLE } from 'react-native-maps'
 import { Paragraph, Avatar, Divider, Button, useTheme } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 
-import { BASE_URL } from '../api'
+import { sliceStringFilter } from '../utils/filters'
 import { isImageExist } from '../utils/filters/uploadImageFilter'
 
 const screen = Dimensions.get('screen')
@@ -21,7 +21,7 @@ export default function MarkerContent({ post }) {
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>{post[0]?.title}</Text>
+			<Text style={styles.title}>{sliceStringFilter(post.title, 20)}</Text>
 			<Divider />
 			<View style={styles.contentContainer}>
 				<View style={styles.leftSide}>
@@ -30,7 +30,7 @@ export default function MarkerContent({ post }) {
 						<Paragraph style={{ ...styles.text }}>
 							Price: <Text style={{ fontWeight: '600' }}>{post?.price} $</Text>
 						</Paragraph>
-						<Text style={{ flexShrink: 1 }}>{post?.description}</Text>
+						<Text style={{ flexShrink: 1 }}>{sliceStringFilter(post?.description, 50)}</Text>
 						<Button color={colors.alert} compact style={{ marginTop: 10 }} mode='contained'>
 							More...
 						</Button>

@@ -4,6 +4,7 @@ import { Button, Divider, Title, useTheme } from 'react-native-paper'
 import { FontAwesome } from '@expo/vector-icons'
 
 import { isImageExist } from '../utils/filters/uploadImageFilter'
+import { sliceStringFilter } from '../utils/filters/'
 
 export default function CarouselMap({ posts, setRegion, navigation }) {
 	const [swipePosition, setSwipePositionState] = useState(150)
@@ -29,15 +30,9 @@ export default function CarouselMap({ posts, setRegion, navigation }) {
 				</View>
 				<View style={{ ...styles.carouselContent }}>
 					<View>
-						<Text>
-							{item?.title.slice(0, 16)}
-							{item.title.length > 16 && '...'}
-						</Text>
+						<Text>{sliceStringFilter(item?.title, 15)}</Text>
 						<Text>{item?.price === 0 ? 'Free' : item?.price + '$'}</Text>
-						<Text>
-							{item?.description.slice(0, 30)}
-							{item.description.length > 15 && '...'}
-						</Text>
+						<Text>{sliceStringFilter(item?.description, 30)}</Text>
 					</View>
 					<Button mode='outlined' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
 						More...
