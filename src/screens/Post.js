@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native'
-import { Button, Caption, Chip, Paragraph, Title, useTheme } from 'react-native-paper'
-import { AntDesign } from '@expo/vector-icons'
+import { Button, Caption, Chip, Paragraph, Title, useTheme, Banner } from 'react-native-paper'
+import { Feather, AntDesign } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -13,6 +13,7 @@ export default function Post({ route, navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
+	const [visible, setVisible] = useState(true)
 
 	// console.log('stateUser', stateUser?._id)
 
@@ -116,7 +117,35 @@ export default function Post({ route, navigation }) {
 					<Image style={styles.stretch} source={require('../../assets/img.jpg')} />
 				)}
 			</View>
+
 			<View style={styles.container}>
+				<Banner
+					visible={visible}
+					style={{ backgroundColor: colors.accent }}
+					actions={[
+						{
+							label: 'Close',
+							onPress: () => setVisible(false),
+						},
+						// {
+						// 	label: 'Learn more',
+						// 	onPress: () => setVisible(false),
+						// },
+					]}
+					icon={({ size }) => (
+						<Feather
+							name='alert-triangle'
+							size={30}
+							color='black'
+							style={{
+								width: size,
+								height: size,
+							}}
+						/>
+					)}>
+					Never pay or pay using any gift cards and exercise caution if someone wants to ship you an item after you have
+					paid.
+				</Banner>
 				<Caption>Created: {formatDate(post?.createdAt)}</Caption>
 				<Title>Title: {post?.title}</Title>
 				<Paragraph>Price: {post?.price}</Paragraph>
