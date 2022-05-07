@@ -7,7 +7,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import { UserContext } from '../store/context'
 import Profile from '../screens/Profile'
-import Create from '../screens/Create'
+import Support from '../screens/Support'
 
 const Drawer = createDrawerNavigator()
 
@@ -62,13 +62,13 @@ export default function Sidebar({ navigation }) {
 						title: 'Profile',
 					}}
 				/>
-				{/* <Drawer.Screen
-					name='create'
-					component={Create}
+				<Drawer.Screen
+					name='support'
+					component={Support}
 					options={{
-						title: 'Create',
+						title: 'Support',
 					}}
-				/> */}
+				/>
 			</Drawer.Group>
 		</Drawer.Navigator>
 	)
