@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux'
+import { View, StyleSheet } from 'react-native'
 import * as Location from 'expo-location'
 import { Button, Paragraph, useTheme, Title } from 'react-native-paper'
 import { AntDesign } from '@expo/vector-icons'
@@ -51,15 +50,25 @@ export default function Profile({ navigation }) {
 		<View style={styles.container}>
 			{/* <Title style={{ textAlign: 'center' }}>My info</Title> */}
 			<Paragraph>
-				Name: {user?.firstName} {user?.lastName}
+				<AntDesign name='user' /> {user?.firstName} {user?.lastName}
 			</Paragraph>
-			<Paragraph>Nickname: {user?.nickname}</Paragraph>
-			<Paragraph>Email: {user?.email}</Paragraph>
-			<Paragraph>Tel: + {user?.tel}</Paragraph>
-			<Paragraph>Address: {user?.coords?.address}</Paragraph>
+			<Paragraph>
+				<AntDesign name='info' /> Profile id: {user?._id}
+			</Paragraph>
+			{/* <Paragraph>{user?.nickname}</Paragraph> */}
+			<Paragraph>
+				<AntDesign name='mail' /> {user?.email}
+			</Paragraph>
+			<Paragraph>
+				<AntDesign name='phone' /> {user?.tel}
+			</Paragraph>
+			<Paragraph>
+				<AntDesign name='home' /> {user?.coords?.address}
+			</Paragraph>
 			<Button
+				style={{ marginVertical: 10 }}
 				color={colors.blue}
-				mode='contained'
+				mode='text'
 				icon={() => <AntDesign name='edit' size={24} color={colors.primary} />}
 				onPress={() => navigation.navigate({ name: 'user', params: { user: user } })}>
 				edit
