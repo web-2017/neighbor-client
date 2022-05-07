@@ -143,8 +143,7 @@ export default function Post({ route, navigation }) {
 							}}
 						/>
 					)}>
-					Never pay or pay using any gift cards and exercise caution if someone wants to ship you an item after you have
-					paid.
+					Never pay using any gift cards and exercise caution if someone wants to ship you an item after you have paid.
 				</Banner>
 				<Caption>Created: {formatDate(post?.createdAt)}</Caption>
 				<Title>Title: {post?.title}</Title>
