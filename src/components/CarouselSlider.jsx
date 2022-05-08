@@ -1,18 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, FlatList } from 'react-native'
+import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, FlatList, Easing } from 'react-native'
 import { Button, Divider, Title, useTheme } from 'react-native-paper'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, AntDesign, Entypo, Feather } from '@expo/vector-icons'
 
 import { isImageExist } from '../utils/filters/uploadImageFilter'
-import { sliceStringFilter } from '../utils/filters/'
+import { sliceStringFilter } from '../utils/filters'
 
-export default function CarouselMap({ posts, setRegion, navigation }) {
+export default function CarouselSlider({ posts, setRegion, navigation }) {
 	const [swipePosition, setSwipePositionState] = useState(150)
 
 	useEffect(() => {
 		Animated.timing(transition, {
 			toValue: swipePosition,
 			duration: 400,
+			easing: Easing.elastic(1.2),
 			useNativeDriver: true,
 		}).start()
 	}, [swipePosition])
@@ -30,9 +31,16 @@ export default function CarouselMap({ posts, setRegion, navigation }) {
 				</View>
 				<View style={{ ...styles.carouselContent }}>
 					<View>
-						<Text>{sliceStringFilter(item?.title, 15)}</Text>
-						<Text>{item?.price === 0 ? 'Free' : item?.price + '$'}</Text>
-						<Text>{sliceStringFilter(item?.description, 30)}</Text>
+						<Text>
+							<AntDesign name='' /> {sliceStringFilter(item?.title, 15)}
+						</Text>
+						<Text>
+							<Entypo name='price-tag' size={13} color={colors.alert} />{' '}
+							{item?.price === 0 ? 'Free' : item?.price + '$'}
+						</Text>
+						<Text>
+							<Feather name='file-text' size={13} color={colors.primary} /> {sliceStringFilter(item?.description, 30)}
+						</Text>
 					</View>
 					<Button mode='outlined' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
 						More...

@@ -10,7 +10,7 @@ import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
 import ZoomControl from './ZoomControl'
 import NavigationButton from './NavigationButton'
-import CarouselMap from './CarouselMap'
+import CarouselSlider from './CarouselSlider'
 
 const initialCoords = {
 	lat: 42.03508453490926,
@@ -136,7 +136,7 @@ export default function Map({ navigation }) {
 			</MapView>
 			<NavigationButton getCurrentLocation={getCurrentLocation} />
 			<ZoomControl mapZoom={mapZoom} setMapZoom={setMapZoom} />
-			<CarouselMap setRegion={setRegion} posts={posts} navigation={navigation} />
+			<CarouselSlider setRegion={setRegion} posts={posts} navigation={navigation} />
 		</View>
 	)
 }

@@ -14,14 +14,13 @@ const date = new Date().toLocaleDateString('en-US')
 export default function MarkerContent({ post }) {
 	const { colors } = useTheme()
 	const navigation = useNavigation()
-
 	return (
 		<Callout
 			style={styles.callout}
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>{sliceStringFilter(post.title, 20)}</Text>
+			<Text style={styles.title}>{sliceStringFilter(post[0]?.title, 20)}</Text>
 			<Divider />
 			<View style={styles.contentContainer}>
 				<View style={styles.leftSide}>
