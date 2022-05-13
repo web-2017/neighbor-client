@@ -140,7 +140,7 @@ export default function Post({ route, navigation }) {
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
 				<Paragraph>Description: {post?.description}</Paragraph>
 				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
-					{stateUser?._id !== post?.postedBy && (
+					{stateUser?._id !== post?.postedBy && stateUser?._id && (
 						<View>
 							{post?.likes?.includes(stateUser?._id) ? (
 								<AntDesign name='heart' size={24} color={colors.alert} onPress={() => removeFromFavorites(postId)} />

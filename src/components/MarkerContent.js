@@ -20,7 +20,7 @@ export default function MarkerContent({ post }) {
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>{sliceStringFilter(post[0]?.title, 20)}</Text>
+			<Text style={styles.title}>{sliceStringFilter(post?.title, 20)}</Text>
 			<Divider />
 			<View style={styles.contentContainer}>
 				<View style={styles.leftSide}>
