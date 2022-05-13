@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import { FontAwesome } from '@expo/vector-icons'
-import { Text } from 'react-native'
+import { Text, View } from 'react-native'
 import { useTheme } from 'react-native-paper'
 
 import MarkerContent from './MarkerContent'
@@ -10,10 +10,15 @@ import { UserContext } from '../store/context'
 export default function MarkerComponent({ index, post }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const { colors } = useTheme()
-
+	// console.log('post', post)
 	return (
 		<Marker
-			// onPress={() => Alert.alert('alarm', 'dasfds')}
+			onPress={(event) => {
+				event.stopPropagation
+			}}
+			onSelect={(event) => {
+				event.stopPropagation
+			}}
 			coordinate={{ latitude: post?.postedBy?.coords?.lat, longitude: post?.postedBy?.coords?.lng }}
 			// draggable
 			key={index}
@@ -29,7 +34,6 @@ export default function MarkerComponent({ index, post }) {
 		>
 			{/* <Text style={{ backgroundColor: '#fff' }}>Hello there</Text> */}
 			{/* <Avatar.Text size={55} label={'JD'} /> */}
-
 			<MarkerContent post={post} />
 		</Marker>
 	)

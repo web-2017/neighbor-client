@@ -63,10 +63,14 @@ export default function Map({ navigation }) {
 			})
 				.then((json) => json.json())
 				.then((data) => {
-					// get all coords
-					// const newCoords = data?.map((x) => x.postedBy.coords)
-					// setCoords(newCoords)
-					setPosts(data) // all posts
+					// get only 1 post of each user for show on map
+					const filteredId = data.map((o) => o.postedBy._id)
+					const filteredData = data.filter((elem, index) => {
+						console.log(index)
+						return !filteredId.includes(elem.postedBy._id, index + 1)
+					})
+
+					setPosts(filteredData) // all posts
 
 					// get user coords for initial region
 					if (stateUser?._id) {
