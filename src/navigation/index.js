@@ -37,24 +37,27 @@ function BottomTabNavigation() {
 					}}
 				/>
 				{stateUser?._id && (
-					<Tab.Screen
-						name='ads'
-						component={PostNavigation}
-						options={{
-							headerShown: false,
-							tabBarLabel: 'My Ads',
-							tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
-						}}
-					/>
+					<>
+						<Tab.Screen
+							name='ads'
+							component={PostNavigation}
+							options={{
+								headerShown: false,
+								tabBarLabel: 'My Ads',
+								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
+							}}
+						/>
+						<Tab.Screen
+							name='favorites'
+							component={FavoriteNavigation}
+							options={{
+								tabBarLabel: 'Favorite',
+								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='heart' color={color} size={20} />,
+							}}
+						/>
+					</>
 				)}
-				<Tab.Screen
-					name='favorites'
-					component={FavoriteNavigation}
-					options={{
-						tabBarLabel: 'Favorite',
-						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='heart' color={color} size={20} />,
-					}}
-				/>
+
 				<Tab.Screen
 					name='profile'
 					component={ProfileNavigation}

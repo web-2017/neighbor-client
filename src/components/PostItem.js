@@ -1,7 +1,7 @@
-import { Avatar, Divider, Card, Paragraph, Button } from 'react-native-paper'
+import { Avatar, Divider, Card, Paragraph, Button, Text } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
 
-import { isImageExist } from '../utils/filters/uploadImageFilter'
+import { isImageExist, formatDateHandler } from '../utils/filters'
 
 export default function PostItem({
 	title = 'Title',
@@ -11,16 +11,19 @@ export default function PostItem({
 	post,
 }) {
 	const navigation = useNavigation()
-	// console.log('post', title)
+	console.log('post', post)
 
 	const LeftContent = (props) => <Avatar.Icon {...props} icon='post' />
 
 	return (
 		<>
-			<Card mode='elevated' style={{ marginVertical: 10 }}>
-				<Card.Title title={title} subtitle={post?.price + ' $'} left={LeftContent} />
+			<Card mode='elevated'>
+				<Card.Title
+					title={title}
+					subtitle={post?.price + ' $ ' + formatDateHandler(post?.createdAt)}
+					left={LeftContent}
+				/>
 				<Card.Content>
-					{/* <Title>{title}</Title> */}
 					<Paragraph>{description}</Paragraph>
 				</Card.Content>
 				<Card.Cover source={{ uri: isImageExist(uri) }} />

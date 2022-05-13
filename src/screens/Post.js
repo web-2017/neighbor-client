@@ -5,7 +5,7 @@ import { Feather, AntDesign } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
-import { uploadImageFilter } from '../utils/filters/uploadImageFilter'
+import { uploadImageFilter, formatDateHandler } from '../utils/filters'
 
 export default function Post({ route, navigation }) {
 	const { postId, postedBy } = route.params
@@ -50,17 +50,6 @@ export default function Post({ route, navigation }) {
 			})()
 		}
 	}, [postId])
-	/**
-	 * @description formatDate format createAt date
-	 * @param  {date} currDate - current date api
-	 */
-	const formatDate = (currDate) => {
-		if (!currDate) return
-		const today = new Date(currDate)
-		const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }
-		const date = today.toLocaleDateString('en-En', options)
-		return date
-	}
 
 	const addToFavorites = async () => {
 		try {
@@ -145,7 +134,7 @@ export default function Post({ route, navigation }) {
 					)}>
 					Never pay using any gift cards and exercise caution if someone wants to ship you an item after you have paid.
 				</Banner>
-				<Caption>Created: {formatDate(post?.createdAt)}</Caption>
+				<Caption>Created: {formatDateHandler(post?.createdAt)}</Caption>
 				<Title>Title: {post?.title}</Title>
 				<Paragraph>Price: {post?.price}</Paragraph>
 				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback } from 'react'
-import { Text, ScrollView } from 'react-native'
+import { Text, ScrollView, View } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 
 import { BASE_URL } from '../api'
@@ -29,20 +29,22 @@ export default function FavoriteScreen({ navigation }) {
 	)
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ alignItems: 'center' }}>
 			{posts.length ? (
 				posts?.map((elem) => {
 					// console.log('posts', posts)
 					if (elem?.likes?.includes(stateUser?._id)) {
 						return (
-							<PostItem
-								postId={elem?._id}
-								uri={elem?.images}
-								title={elem?.title}
-								description={elem?.description}
-								key={elem._id}
-								post={elem}
-							/>
+							<View style={{ width: '87%' }} key={elem._id}>
+								<PostItem
+									postId={elem?._id}
+									uri={elem?.images}
+									title={elem?.title}
+									description={elem?.description}
+									key={elem._id}
+									post={elem}
+								/>
+							</View>
 						)
 					}
 				})
