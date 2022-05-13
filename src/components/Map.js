@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
-import { View, Dimensions, StyleSheet, TouchableOpacity, Alert, Text } from 'react-native'
+import { View, StyleSheet, Alert } from 'react-native'
 
 import { useTheme } from 'react-native-paper'
 
@@ -65,10 +65,7 @@ export default function Map({ navigation }) {
 				.then((data) => {
 					// get only 1 post of each user for show on map
 					const filteredId = data.map((o) => o.postedBy._id)
-					const filteredData = data.filter((elem, index) => {
-						console.log(index)
-						return !filteredId.includes(elem.postedBy._id, index + 1)
-					})
+					const filteredData = data.filter((elem, index) => !filteredId.includes(elem.postedBy._id, index + 1))
 
 					setPosts(filteredData) // all posts
 
@@ -97,14 +94,6 @@ export default function Map({ navigation }) {
 		}
 	}
 
-	const onSwipeUp = (gestureState) => {
-		console.log('onSwipeUp', onSwipeUp)
-	}
-
-	const onSwipeDown = (gestureState) => {
-		console.log('onSwipeDown', onSwipeDown)
-	}
-
 	return (
 		<View style={{ flex: 1 }}>
 			<MapView
@@ -125,9 +114,6 @@ export default function Map({ navigation }) {
 					region: { latitude: region?.lat, longitude: region?.lng, latitudeDelta: 0.03, longitudeDelta: 0.03 },
 					duration: 300,
 				}}
-				zoomEnabled={true}
-				zoomControlEnabled={true}
-				scrollEnabled={true}
 				zoomTapEnabled={true}
 				showsMyLocationButton={true}
 				onMapReady={() => {
@@ -144,21 +130,3 @@ export default function Map({ navigation }) {
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		justifyContent: 'center',
-		zIndex: 10,
-	},
-	map: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height,
-	},
-	mapStyle: {
-		flex: 1,
-		marginLeft: 3,
-	},
-})
