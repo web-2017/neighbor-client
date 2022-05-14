@@ -20,24 +20,24 @@ export default function MarkerContent({ post }) {
 			onPress={() => {
 				navigation.navigate('post', { postId: post?._id, postedBy: post?.postedBy?._id })
 			}}>
-			<Text style={styles.title}>{sliceStringFilter(post?.title, 20)}</Text>
+			<Text style={{ ...styles.title, color: colors.primary }}>{sliceStringFilter(post?.title, 20)}</Text>
 			<Divider />
 			<View style={styles.contentContainer}>
 				<View style={styles.leftSide}>
 					<View style={{ alignContent: 'center' }}>
-						<Text style={styles.text}>Date: {date}</Text>
-						<Paragraph style={{ ...styles.text }}>
-							Price: <Text style={{ fontWeight: '600' }}>{post?.price} $</Text>
+						<Text style={{ ...styles.text, color: colors.primary }}>Date: {date}</Text>
+						<Paragraph style={{ ...styles.text, color: colors.primary }}>
+							Price: <Text style={{ fontWeight: '800' }}>{post?.price} $</Text>
 						</Paragraph>
-						<Text style={{ flexShrink: 1 }}>{sliceStringFilter(post?.description, 50)}</Text>
-						<Button color={colors.alert} compact style={{ marginTop: 10 }} mode='contained'>
+						<Text style={{ flexShrink: 1, color: colors.primary }}>{sliceStringFilter(post?.description, 50)}</Text>
+						<Button color={colors.blue} compact style={{ marginTop: 10 }} mode='text'>
 							More...
 						</Button>
 					</View>
 				</View>
 				<View style={styles.rightSide}>
 					{/* <Avatar.Text size={55} label={'JD'} /> */}
-					<Image style={{ height: '100%', width: '100%' }} source={{ uri: isImageExist(post?.images) }} />
+					<Image style={{ height: 120, width: '100%', borderRadius: 8 }} source={{ uri: isImageExist(post?.images) }} />
 				</View>
 			</View>
 		</Callout>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 		textAlign: 'center',
 		marginVertical: 10,
+		textTransform: 'uppercase',
 	},
 	leftSide: {
 		flex: 2,

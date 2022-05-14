@@ -10,7 +10,7 @@ export const theme = {
 		brown: '#F4A261',
 		alert: '#E76F51',
 		red: '#e91e63',
-		gray: '#e5e5e5',
+		gray: '#3A506B',
 		blue: '#219ebc',
 	},
 }

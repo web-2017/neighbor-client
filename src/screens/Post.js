@@ -1,21 +1,22 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native'
-import { Button, Caption, Chip, Paragraph, Title, useTheme, Banner } from 'react-native-paper'
-import { Feather, AntDesign } from '@expo/vector-icons'
+import { Button, Caption, Paragraph, Title, useTheme, Banner } from 'react-native-paper'
+import { Feather, AntDesign, Entypo, MaterialIcons, Foundation, FontAwesome } from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
 import { uploadImageFilter, formatDateHandler } from '../utils/filters'
 
 export default function Post({ route, navigation }) {
-	const { postId, postedBy } = route.params
+	const { postId } = route.params
 	const { colors } = useTheme()
 	const [stateUser, setStateUser] = useContext(UserContext)
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(true)
 
-	// console.log('stateUser', stateUser?._id)
+	// console.log('stateUser', stateUser)
+	console.log('post', post)
 
 	const deletePostHandler = (postId) => {
 		fetch(`${BASE_URL}/post/${postId}`, {
@@ -66,7 +67,7 @@ export default function Post({ route, navigation }) {
 
 			const data = await response.json()
 			setPost(data)
-			console.log(data)
+			console.log(1)
 		} catch (err) {
 			console.log(err)
 		}
@@ -87,7 +88,10 @@ export default function Post({ route, navigation }) {
 
 			const data = await response.json()
 			setPost(data)
-			console.log(data)
+			if (response.status === 200) {
+				navigation.goBack()
+			}
+			console.log(2)
 		} catch (err) {
 			console.log(err)
 		}
@@ -97,11 +101,7 @@ export default function Post({ route, navigation }) {
 		<ScrollView>
 			<View>
 				{post?.images ? (
-					<Image
-						style={styles.stretch}
-						loadingIndicatorSource={post?.images[0]}
-						source={{ uri: `${uploadImageFilter(`${BASE_URL}/${post?.images[0]}`)}` }}
-					/>
+					<Image style={styles.stretch} source={{ uri: `${uploadImageFilter(`${BASE_URL}/${post?.images[0]}`)}` }} />
 				) : (
 					<Image style={styles.stretch} source={require('../../assets/img.jpg')} />
 				)}
@@ -135,12 +135,28 @@ export default function Post({ route, navigation }) {
 					Never pay using any gift cards and exercise caution if someone wants to ship you an item after you have paid.
 				</Banner>
 				<Caption>Created: {formatDateHandler(post?.createdAt)}</Caption>
-				<Title>Title: {post?.title}</Title>
-				<Paragraph>Price: {post?.price}</Paragraph>
-				<Paragraph>Address {stateUser?.user?.coords?.address}</Paragraph>
-				<Paragraph>Description: {post?.description}</Paragraph>
+				<Title style={{ color: colors.primary }}>{post?.title?.toUpperCase()}</Title>
+				<Paragraph>
+					{post?.price} {post?.price !== 0 && <Foundation name='dollar' size={17} color={colors.primary} />}
+				</Paragraph>
+				<Paragraph>
+					<Entypo name='address' size={15} color={colors.primary} /> {post?.postedBy?.coords?.address}
+				</Paragraph>
+				<Paragraph>
+					<Entypo name='user' size={15} color={colors.primary} /> {post?.postedBy?.firstName}
+				</Paragraph>
+				<Paragraph>
+					<Entypo name='email' size={15} color={colors.primary} /> {post?.postedBy?.email}
+				</Paragraph>
+				<Paragraph>
+					<FontAwesome name='phone' size={15} color={colors.primary} /> {post?.postedBy?.tel}
+				</Paragraph>
+				<Paragraph style={{ color: colors.gray }}>
+					<MaterialIcons name='description' size={15} color={colors.primary} />
+					{post?.description}
+				</Paragraph>
 				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
-					{stateUser?._id !== post?.postedBy && stateUser?._id && (
+					{stateUser?._id !== post?.postedBy?._id && stateUser?._id && (
 						<View>
 							{post?.likes?.includes(stateUser?._id) ? (
 								<AntDesign name='heart' size={24} color={colors.alert} onPress={() => removeFromFavorites(postId)} />
@@ -150,7 +166,7 @@ export default function Post({ route, navigation }) {
 						</View>
 					)}
 				</View>
-				{stateUser?._id === post?.postedBy && (
+				{stateUser?._id === post?.postedBy?._id && (
 					<View style={styles.btnContainer}>
 						<Button
 							// title='Choose Photo'

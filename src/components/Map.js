@@ -64,12 +64,13 @@ export default function Map({ navigation }) {
 			})
 				.then((json) => json.json())
 				.then((data) => {
-					// get only 1 post of each user for show on map
+					// filter only 1 post of each Posts for show on Marker
 					const filteredId = data.map((o) => o.postedBy._id)
-					const filteredData = data.filter((elem, index) => !filteredId.includes(elem.postedBy._id, index + 1))
-
-					setPosts(data) // all posts
-					setPostsForMap(filteredData) // only 1 post of each posts for Markers map
+					const filteredUniqDataById = data.filter((elem, index) => !filteredId.includes(elem.postedBy._id, index + 1))
+					// all posts
+					setPosts(data)
+					// set post = because marker has many posts and many clicks events
+					setPostsForMap(filteredUniqDataById)
 
 					// get user coords for initial region
 					if (stateUser?._id) {

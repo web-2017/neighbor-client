@@ -13,27 +13,19 @@ export default function MarkerComponent({ index, post }) {
 	// console.log('post', post)
 	return (
 		<Marker
-			onPress={(event) => {
-				event.stopPropagation
-			}}
-			onSelect={(event) => {
-				event.stopPropagation
-			}}
 			coordinate={{ latitude: post?.postedBy?.coords?.lat, longitude: post?.postedBy?.coords?.lng }}
-			// draggable
 			key={index}
-			// pinColor={colors.alert}
+			// draggable
+			// pinColor={colors.red}
 			// image={{
 			// 	uri: ``,
 			// 	width: 8,
 			// 	height: 8,
-			// 	scale: 1,
+			// 	scale: 0.3,
 			// }}
-			zoomEnabled={true}
 			// calloutOffset={{ x: 30, y: 50 }} // offset
 		>
 			{/* <Text style={{ backgroundColor: '#fff' }}>Hello there</Text> */}
-			{/* <Avatar.Text size={55} label={'JD'} /> */}
 			<MarkerContent post={post} />
 		</Marker>
 	)

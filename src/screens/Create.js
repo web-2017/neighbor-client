@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native'
+import { View, StyleSheet, Image, ScrollView } from 'react-native'
 import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
 import { useIsFocused } from '@react-navigation/core'
-import { useSelector, useDispatch } from 'react-redux'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -23,14 +22,12 @@ export default function Create({ navigation, route }) {
 	const [message, setMessage] = useState(null)
 	const [isError, setIsError] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
 
 	useEffect(() => {
 		;(async () => {
-			if (Platform.OS !== 'web') {
-				const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-				if (status !== 'granted') {
-					alert('Sorry, we need camera roll permissions to make this work!')
-				}
+			if (status !== 'granted') {
+				alert('Sorry, we need camera roll permissions to make this work!')
 			}
 		})()
 	}, [])
