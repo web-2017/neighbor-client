@@ -31,10 +31,7 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 				</View>
 				<View style={{ ...styles.carouselContent }}>
 					<View>
-						<Text style={{ fontSize: 18, paddingBottom: 5 }}>
-							{/* <FontAwesome name='text-height' size={15} color='black' /> */}
-							{sliceStringFilter(item?.title, 10)}
-						</Text>
+						<Text style={{ fontSize: 18, paddingBottom: 5 }}>{sliceStringFilter(item?.title, 10)}</Text>
 						<Text style={{ fontSize: 17, paddingBottom: 5, fontWeight: 'bold' }}>
 							<Entypo name='price-tag' size={15} color={colors.blue} /> {item?.price === 0 ? 'Free' : item?.price + '$'}
 						</Text>
@@ -53,9 +50,9 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 	return (
 		<Animated.View style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: '#fff' }}>
 			<Title
-				style={styles.swipeBtn}
+				style={{ ...styles.swipeBtn, color: colors.primary }}
 				onPress={() => (swipePosition === 0 ? setSwipePositionState(150) : setSwipePositionState(0))}>
-				Filter <AntDesign name='arrowsalt' size={15} />
+				Press <AntDesign name={`arrow${swipePosition === 0 ? 'down' : 'salt'}`} size={15} color={colors.primary} />
 			</Title>
 			<Divider />
 			<FlatList
@@ -75,7 +72,7 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		height: 200,
 		alignSelf: 'center',
-		width: '100%',
+		width: '98%',
 		borderRadius: 4,
 	},
 	swipeBtn: {
@@ -85,6 +82,7 @@ const styles = StyleSheet.create({
 		padding: 6,
 		borderRadius: 6,
 		overflow: 'hidden',
+		textTransform: 'uppercase',
 	},
 	carouselItem: {
 		width: 250,
