@@ -8,6 +8,7 @@ import ProfileNavigation from './ProfileNavigation'
 import PostNavigation from './PostNavigation'
 import HomeNavigation from './HomeNavigation'
 import FavoriteNavigation from './FavoriteNavigation'
+import ChatNavigation from './ChatNavigation'
 import { UserContext } from '../store/context'
 
 export const Tab = createBottomTabNavigator()
@@ -45,6 +46,15 @@ function BottomTabNavigation() {
 								headerShown: false,
 								tabBarLabel: 'My Ads',
 								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
+							}}
+						/>
+						<Tab.Screen
+							name='ChatNavigation'
+							component={ChatNavigation}
+							options={{
+								headerShown: false,
+								tabBarLabel: 'Chat',
+								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='message' color={color} size={28} />,
 							}}
 						/>
 						<Tab.Screen

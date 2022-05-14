@@ -11,7 +11,7 @@ export default function PostItem({
 	post,
 }) {
 	const navigation = useNavigation()
-	console.log('post', post)
+	// console.log('post', post)
 
 	const LeftContent = (props) => <Avatar.Icon {...props} icon='post' />
 

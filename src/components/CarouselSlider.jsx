@@ -31,18 +31,18 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 				</View>
 				<View style={{ ...styles.carouselContent }}>
 					<View>
-						<Text>
-							<AntDesign name='' /> {sliceStringFilter(item?.title, 15)}
+						<Text style={{ fontSize: 18, paddingBottom: 5 }}>
+							{/* <FontAwesome name='text-height' size={15} color='black' /> */}
+							{sliceStringFilter(item?.title, 10)}
 						</Text>
-						<Text>
-							<Entypo name='price-tag' size={13} color={colors.alert} />{' '}
-							{item?.price === 0 ? 'Free' : item?.price + '$'}
+						<Text style={{ fontSize: 17, paddingBottom: 5, fontWeight: 'bold' }}>
+							<Entypo name='price-tag' size={15} color={colors.blue} /> {item?.price === 0 ? 'Free' : item?.price + '$'}
 						</Text>
 						<Text>
 							<Feather name='file-text' size={13} color={colors.primary} /> {sliceStringFilter(item?.description, 30)}
 						</Text>
 					</View>
-					<Button mode='outlined' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
+					<Button mode='text' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
 						More...
 					</Button>
 				</View>
@@ -51,12 +51,11 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 	}
 
 	return (
-		<Animated.View
-			style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: colors.blue }}>
+		<Animated.View style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: '#fff' }}>
 			<Title
-				style={{ alignSelf: 'center' }}
+				style={styles.swipeBtn}
 				onPress={() => (swipePosition === 0 ? setSwipePositionState(150) : setSwipePositionState(0))}>
-				Filter <FontAwesome name={`arrow-${swipePosition === 0 ? 'up' : 'down'}`} size={20} color={'#fff'} />
+				Filter <AntDesign name='arrowsalt' size={15} />
 			</Title>
 			<Divider />
 			<FlatList
@@ -73,22 +72,37 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 const styles = StyleSheet.create({
 	carousel: {
 		position: 'absolute',
-		backgroundColor: '#ffffff',
 		bottom: 0,
 		height: 200,
 		alignSelf: 'center',
-		width: '90%',
+		width: '100%',
 		borderRadius: 4,
+	},
+	swipeBtn: {
+		alignSelf: 'center',
+		fontSize: 17,
+		backgroundColor: '#fff',
+		padding: 6,
+		borderRadius: 6,
+		overflow: 'hidden',
 	},
 	carouselItem: {
 		width: 250,
 		flexDirection: 'row',
 		marginHorizontal: 10,
-		borderWidth: 1,
-		borderColor: '#3e3e3e67',
+
 		borderRadius: 4,
-		overflow: 'hidden',
+		// overflow: 'hidden',
 		backgroundColor: '#ffffffe7',
+
+		shadowColor: '#000',
+		shadowOffset: {
+			width: 0,
+			height: 3,
+		},
+		shadowOpacity: 0.3,
+		shadowRadius: 4.65,
+		elevation: 7,
 	},
 	carouselContent: {
 		flexDirection: 'column',
