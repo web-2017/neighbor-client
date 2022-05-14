@@ -24,6 +24,7 @@ export default function Map({ navigation }) {
 	const [paddingStyle, setPadding] = useState(0) // show showMyLocation button
 	const [region, setRegion] = useState(initialCoords)
 	const [posts, setPosts] = useState([])
+	const [postsForMap, setPostsForMap] = useState([])
 	const [errorMsg, setErrorMsg] = useState(null)
 	const [mapZoom, setMapZoom] = useState(0.03)
 	const { colors } = useTheme()
@@ -67,7 +68,8 @@ export default function Map({ navigation }) {
 					const filteredId = data.map((o) => o.postedBy._id)
 					const filteredData = data.filter((elem, index) => !filteredId.includes(elem.postedBy._id, index + 1))
 
-					setPosts(filteredData) // all posts
+					setPosts(data) // all posts
+					setPostsForMap(filteredData) // only 1 post of each posts for Markers map
 
 					// get user coords for initial region
 					if (stateUser?._id) {
@@ -120,7 +122,7 @@ export default function Map({ navigation }) {
 					console.log('Map ready')
 					setPadding(100)
 				}}>
-				{posts?.map((post, index) => (
+				{postsForMap?.map((post, index) => (
 					<MarkerComponent key={index} post={post} />
 				))}
 			</MapView>

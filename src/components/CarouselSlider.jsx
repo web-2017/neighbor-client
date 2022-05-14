@@ -36,7 +36,7 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 							<Entypo name='price-tag' size={15} color={colors.blue} /> {item?.price === 0 ? 'Free' : item?.price + '$'}
 						</Text>
 						<Text>
-							<Feather name='file-text' size={13} color={colors.primary} /> {sliceStringFilter(item?.description, 30)}
+							<Feather name='file-text' size={13} color={colors.primary} /> {sliceStringFilter(item?.description, 25)}
 						</Text>
 					</View>
 					<Button mode='text' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
