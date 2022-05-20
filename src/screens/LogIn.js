@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setUserReducer } from '../store/reducers/userReducer'
 
 import TextCustom from '../components/TextCustom'
-import { BASE_URL } from '../api'
+import { logInRoute } from '../api/apiRoutes'
 import { saveStoreData } from '../utils/AsyncStorage'
 import { UserContext } from '../store/context'
 
@@ -37,7 +37,7 @@ export default function LogIn({ navigation }) {
 		setLoading(true)
 
 		try {
-			const response = await fetch(`${BASE_URL}/signin`, {
+			const response = await fetch(logInRoute, {
 				method: 'POST',
 				headers: {
 					'Content-type': 'application/json',

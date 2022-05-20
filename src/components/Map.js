@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import * as Location from 'expo-location'
 import { View, StyleSheet, Alert } from 'react-native'
-
 import { useTheme } from 'react-native-paper'
 
-import { BASE_URL } from '../api'
+import { postsRoute } from '../api/apiRoutes'
 import { UserContext } from '../store/context'
 import MarkerComponent from './MarkerComponent'
 import ZoomControl from './ZoomControl'
@@ -55,7 +54,7 @@ export default function Map({ navigation }) {
 	// get all posts/coords on focus screen
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
-			fetch(`${BASE_URL}/posts`, {
+			fetch(postsRoute, {
 				method: 'get',
 				headers: {
 					'Content-Type': 'application/json',

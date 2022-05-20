@@ -5,7 +5,7 @@ import { TextInput, Button, useTheme, Snackbar, Text } from 'react-native-paper'
 import { useSelector } from 'react-redux'
 
 import TextCustom from '../components/TextCustom'
-import { BASE_URL } from '../api'
+import { registerRoute } from '../api/apiRoutes'
 
 export default function SignUp({ navigation }) {
 	const [email, setEmail] = useState('')
@@ -70,7 +70,7 @@ export default function SignUp({ navigation }) {
 
 		setLoading(true)
 
-		await fetch(`${BASE_URL}/signup`, {
+		await fetch(registerRoute, {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',

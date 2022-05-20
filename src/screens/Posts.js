@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { Chip, useTheme, FAB } from 'react-native-paper'
 
-import { BASE_URL } from '../api'
+import { myPostsRoute } from '../api/apiRoutes'
 import PostItem from '../components/PostItem'
 import { UserContext } from '../store/context'
 
@@ -13,7 +13,7 @@ export default function Posts({ navigation, params }) {
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
-			fetch(`${BASE_URL}/my-posts`, {
+			fetch(myPostsRoute, {
 				method: 'get',
 				headers: {
 					'Content-Type': 'application/json',
