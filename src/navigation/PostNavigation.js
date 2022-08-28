@@ -1,8 +1,8 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Posts from '../screens/Posts'
-import Post from '../screens/Post'
+import PostsScreen from '../screens/PostsScreen'
+import PostScreen from '../screens/PostScreen'
 import EditPost from '../screens/EditPost'
 import Create from '../screens/Create'
 import GoogleSearchLocation from '../screens/GoogleSearchLocation'
@@ -15,7 +15,7 @@ export default function PostNavigation() {
 		<Stack.Navigator>
 			<Stack.Screen
 				name='allposts'
-				component={Posts}
+				component={PostsScreen}
 				options={{
 					headerShown: true,
 					title: 'My Posts',
@@ -39,7 +39,7 @@ export default function PostNavigation() {
 			/>
 			<Stack.Screen
 				name='post'
-				component={Post}
+				component={PostScreen}
 				options={{
 					headerShown: true,
 					transitionSpec: {

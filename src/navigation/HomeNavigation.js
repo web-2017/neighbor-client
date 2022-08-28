@@ -3,8 +3,8 @@ import { Text } from 'react-native'
 import { useTheme } from 'react-native-paper'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Home from '../screens/Home'
-import Post from '../screens/Post'
+import HomeScreen from '../screens/HomeScreen'
+import PostScreen from '../screens/PostScreen'
 import EditPost from '../screens/EditPost'
 import { constants } from '../config/constants'
 import { configNavigationAnimation } from './configNavigation'
@@ -23,7 +23,7 @@ export default function HomeNavigation() {
 			}}>
 			<Stack.Screen
 				name='Home'
-				component={Home}
+				component={HomeScreen}
 				options={{
 					// title: constants.logoTitle,
 					transitionSpec: {
@@ -43,7 +43,7 @@ export default function HomeNavigation() {
 					},
 				}}
 				name='post'
-				component={Post}
+				component={PostScreen}
 			/>
 			<Stack.Screen name='editPost' component={EditPost} />
 		</Stack.Navigator>

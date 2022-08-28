@@ -6,8 +6,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import { UserContext } from '../store/context'
-import Profile from '../screens/Profile'
-import Support from '../screens/Support'
+import ProfileScreen from '../screens/ProfileScreen'
+import SupportScreen from '../screens/SupportScreen'
 
 const Drawer = createDrawerNavigator()
 
@@ -56,7 +56,7 @@ export default function Sidebar({ navigation }) {
 			<Drawer.Group>
 				<Drawer.Screen
 					name='profile'
-					component={Profile}
+					component={ProfileScreen}
 					root='profile'
 					options={{
 						title: 'Profile',
@@ -64,7 +64,7 @@ export default function Sidebar({ navigation }) {
 				/>
 				<Drawer.Screen
 					name='support'
-					component={Support}
+					component={SupportScreen}
 					options={{
 						title: 'Support',
 					}}

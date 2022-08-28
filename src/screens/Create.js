@@ -25,14 +25,6 @@ export default function Create({ navigation, route }) {
 	const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions()
 
 	useEffect(() => {
-		;(async () => {
-			if (status !== 'granted') {
-				alert('Sorry, we need camera roll permissions to make this work!')
-			}
-		})()
-	}, [])
-
-	useEffect(() => {
 		// console.log('route', route)
 	}, [isFocused])
 

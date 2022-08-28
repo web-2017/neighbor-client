@@ -1,45 +1,51 @@
 import { View, Text, TextInput, Button, ScrollView } from 'react-native'
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import { io } from 'socket.io-client'
+
 import { UserContext } from '../store/context'
+import { ChatList } from '../components/ChatList'
+import { getAllUsersRoute } from '../api/apiRoutes'
 const ChatScreen = () => {
 	const [stateUser, setStateUser] = useContext(UserContext)
-	const [value, setValue] = useState('')
-	const [messages, setMessages] = useState([])
-	const socket = io('http://localhost:4001')
-	// client-side
-	useEffect(() => {
-		socket.on('output-messages', (data) => {
-			console.log('msg client output-messages', data)
-			setMessages(data)
-		})
-	}, [])
+	const [contacts, setContacts] = useState([])
+	const [currentUser, setCurrentUser] = useState([])
+	const [currentUserImage, setCurrentUserImage] = useState(undefined)
+	const [currentUserName, setCurrentUserName] = useState(undefined)
+	const [currentSelectedChat, setCurrentSelectedChat] = useState(undefined)
 
-	const sendMessage = () => {
-		socket.on('message', (data) => {
-			console.log('message data', data)
-			socket.emit('chatmessage', { name: stateUser._id, message: value })
-			console.log('chatmessage', data)
-			setValue('')
-		})
-	}
+	const socket = io('http://localhost:4001')
+
+	useFocusEffect(
+		useCallback(() => {
+			const unsubscribe = fetch(`${getAllUsersRoute}/${stateUser._id}`, {
+				method: 'get',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then((json) => json.json())
+				.then((data) => {
+					console.log('users', data)
+					setContacts(data)
+				})
+				.catch((err) => console.log(err))
+
+			return () => unsubscribe
+		}, [])
+	)
 
 	return (
 		<ScrollView style={{ flex: 1 }}>
-			<View>
-				<Text>ChatScreen</Text>
-
-				<View style={{ flexDirection: 'row' }}>
-					<TextInput
-						value={value}
-						onChangeText={setValue}
-						placeholder='message'
-						style={{ flex: 1, borderColor: '#000' }}
-					/>
-
-					<Button onPress={() => sendMessage()} title='Send' />
-				</View>
-			</View>
+			<ChatList
+				contacts={contacts}
+				currentSelectedChat={currentSelectedChat}
+				setCurrentSelectedChat={setCurrentSelectedChat}
+				currentUserName={currentUserName}
+				setCurrentUserName={setCurrentUserName}
+				currentUserImage={currentUserImage}
+				setCurrentUserImage={setCurrentUserImage}
+			/>
 		</ScrollView>
 	)
 }

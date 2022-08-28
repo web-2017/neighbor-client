@@ -2,10 +2,9 @@ import React, { useContext } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { UserContext } from '../store/context'
-import LogIn from '../screens/LogIn'
-import SignUp from '../screens/SignUp'
-import User from '../screens/User'
-import Support from '../screens/Support'
+import LogInScreen from '../screens/LogInScreen'
+import SignUpScreen from '../screens/SignUpScreen'
+import UserScreen from '../screens/UserScreen'
 import GoogleSearchLocation from '../screens/GoogleSearchLocation'
 import Sidebar from './Sidebar'
 
@@ -21,21 +20,21 @@ export default function ProfileNavigation() {
 				<Stack.Group>
 					<Stack.Screen name='profileNavigator' component={Sidebar} />
 					<Stack.Group screenOptions={{ presentation: 'modal' }}>
-						<Stack.Screen name='user' component={User} />
+						<Stack.Screen name='user' component={UserScreen} />
 					</Stack.Group>
 				</Stack.Group>
 			) : (
 				<Stack.Group>
 					<Stack.Screen
 						name='login'
-						component={LogIn}
+						component={LogInScreen}
 						options={{
 							title: 'LogIn',
 						}}
 					/>
 					<Stack.Screen
 						name='signup'
-						component={SignUp}
+						component={SignUpScreen}
 						options={{
 							title: 'SignUp',
 						}}
