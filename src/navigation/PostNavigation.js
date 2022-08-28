@@ -7,6 +7,7 @@ import EditPost from '../screens/EditPost'
 import Create from '../screens/Create'
 import GoogleSearchLocation from '../screens/GoogleSearchLocation'
 import { configNavigationAnimation } from './configNavigation'
+import SendMessageScreen from '../screens/SendMessageScreen'
 
 const Stack = createStackNavigator()
 
@@ -50,6 +51,9 @@ export default function PostNavigation() {
 			/>
 			<Stack.Group screenOptions={{ presentation: 'modal' }}>
 				<Stack.Screen name='googleSearchLocation' component={GoogleSearchLocation} />
+			</Stack.Group>
+			<Stack.Group screenOptions={{ presentation: 'modal' }}>
+				<Stack.Screen name='sendMessage' component={SendMessageScreen} />
 			</Stack.Group>
 			<Stack.Group screenOptions={{ presentation: 'modal' }}>
 				<Stack.Screen name='editPost' component={EditPost} />

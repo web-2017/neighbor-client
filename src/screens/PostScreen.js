@@ -14,9 +14,10 @@ export default function Post({ route, navigation }) {
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(true)
+	const [isCurrentUser, setIsCurrentUser] = useState(stateUser?._id === post?.postedBy?._id)
 
 	// console.log('stateUser', stateUser)
-	console.log('post', post)
+	// console.log('post', post)
 
 	const deletePostHandler = (postId) => {
 		fetch(`${BASE_URL}/post/${postId}`, {
@@ -67,7 +68,6 @@ export default function Post({ route, navigation }) {
 
 			const data = await response.json()
 			setPost(data)
-			console.log(1)
 		} catch (err) {
 			console.log(err)
 		}
@@ -89,9 +89,8 @@ export default function Post({ route, navigation }) {
 			const data = await response.json()
 			setPost(data)
 			if (response.status === 200) {
-				navigation.goBack()
+				// navigation.goBack()
 			}
-			console.log(2)
 		} catch (err) {
 			console.log(err)
 		}
@@ -155,9 +154,17 @@ export default function Post({ route, navigation }) {
 					<MaterialIcons name='description' size={15} color={colors.primary} />
 					{post?.description}
 				</Paragraph>
-				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
-					{stateUser?._id !== post?.postedBy?._id && stateUser?._id && (
-						<View>
+				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%', marginVertical: 20 }}>
+					{!isCurrentUser && 
+					<Button
+						color={colors.green}
+						icon="send" 
+						mode="contained" 
+						onPress={() => navigation.navigate('sendMessage', { post })}>
+						send message
+					</Button>}
+					{!isCurrentUser && stateUser?._id && (
+						<View style={{marginLeft: 10}}>
 							{post?.likes?.includes(stateUser?._id) ? (
 								<AntDesign name='heart' size={24} color={colors.alert} onPress={() => removeFromFavorites(postId)} />
 							) : (
@@ -166,7 +173,7 @@ export default function Post({ route, navigation }) {
 						</View>
 					)}
 				</View>
-				{stateUser?._id === post?.postedBy?._id && (
+				{isCurrentUser && (
 					<View style={styles.btnContainer}>
 						<Button
 							// title='Choose Photo'

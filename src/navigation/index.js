@@ -8,7 +8,7 @@ import ProfileNavigation from './ProfileNavigation'
 import PostNavigation from './PostNavigation'
 import HomeNavigation from './HomeNavigation'
 import FavoriteNavigation from './FavoriteNavigation'
-import ChatNavigation from './ChatNavigation'
+import MessageNavigation from './MessageNavigation'
 import { UserContext } from '../store/context'
 
 export const Tab = createBottomTabNavigator()
@@ -49,8 +49,8 @@ function BottomTabNavigation() {
 							}}
 						/>
 						<Tab.Screen
-							name='ChatNavigation'
-							component={ChatNavigation}
+							name='MessageNavigation'
+							component={MessageNavigation}
 							options={{
 								headerShown: false,
 								tabBarLabel: 'Chat',

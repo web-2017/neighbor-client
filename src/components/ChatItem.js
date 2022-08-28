@@ -16,8 +16,6 @@ export const ChatItem = ({
 
 	useEffect(() => {
 		if (stateUser?._id) {
-			console.log(stateUser)
-
 			setCurrentUserImage(stateUser?.user?.avatarImage)
 			setCurrentUserName(stateUser?.user?.username)
 		}
@@ -28,7 +26,7 @@ export const ChatItem = ({
 			<List.Item
 				onPress={() => console.log('hello')}
 				title={'ddd'}
-				description='dasfasfasddasfasfasddasfasfasddasfasfasddasfasfasd'
+				description='asss'
 				left={() => <List.Icon icon='folder' />}
 				// right={() => <List.Icon icon='star' />}
 				right={() => {
