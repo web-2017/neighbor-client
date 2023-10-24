@@ -44,9 +44,15 @@ export default function Map({ navigation }) {
 			let location = await Location.getCurrentPositionAsync({})
 
 			if (location) {
-				setRegion({ lat: location?.coords?.latitude, lng: location?.coords.longitude })
+				setRegion({
+					lat: location?.coords?.latitude,
+					lng: location?.coords.longitude,
+				})
 			} else {
-				Alert.alert('Error - current location', 'Please go to setting and turn on location')
+				Alert.alert(
+					'Error - current location',
+					'Please go to setting and turn on location'
+				)
 			}
 		})()
 	}, [])
@@ -65,7 +71,9 @@ export default function Map({ navigation }) {
 				.then((data) => {
 					// filter only 1 post of each Posts for show on Marker
 					const filteredId = data.map((o) => o.postedBy._id)
-					const filteredUniqDataById = data.filter((elem, index) => !filteredId.includes(elem.postedBy._id, index + 1))
+					const filteredUniqDataById = data.filter(
+						(elem, index) => !filteredId.includes(elem.postedBy._id, index + 1)
+					)
 					// all posts
 					setPosts(data)
 					// set post = because marker has many posts and many clicks events
@@ -73,7 +81,9 @@ export default function Map({ navigation }) {
 
 					// get user coords for initial region
 					if (stateUser?._id) {
-						const getUserInitialCoords = data.filter((elem) => elem.postedBy._id === stateUser._id)
+						const getUserInitialCoords = data.filter(
+							(elem) => elem.postedBy._id === stateUser._id
+						)
 						setRegion(getUserInitialCoords.coords)
 					}
 				})
@@ -101,10 +111,12 @@ export default function Map({ navigation }) {
 			<MapView
 				ref={mapRef}
 				// provider={PROVIDER_GOOGLE}
-				userInterfaceStyle='dark'
+				userInterfaceStyle="dark"
 				region={{
 					latitude: stateUser?._id ? stateUser?.user?.coords?.lat : region?.lat,
-					longitude: stateUser?._id ? stateUser?.user?.coords?.lng : region?.lng,
+					longitude: stateUser?._id
+						? stateUser?.user?.coords?.lng
+						: region?.lng,
 					latitudeDelta: mapZoom,
 					longitudeDelta: initialCoords.longitudeDelta,
 				}}
@@ -113,7 +125,12 @@ export default function Map({ navigation }) {
 					paddingBottom: paddingStyle,
 				}}
 				animateToRegion={{
-					region: { latitude: region?.lat, longitude: region?.lng, latitudeDelta: 0.03, longitudeDelta: 0.03 },
+					region: {
+						latitude: region?.lat,
+						longitude: region?.lng,
+						latitudeDelta: 0.03,
+						longitudeDelta: 0.03,
+					},
 					duration: 300,
 				}}
 				zoomTapEnabled={true}
@@ -121,14 +138,19 @@ export default function Map({ navigation }) {
 				onMapReady={() => {
 					console.log('Map ready')
 					setPadding(100)
-				}}>
+				}}
+			>
 				{postsForMap?.map((post, index) => (
 					<MarkerComponent key={index} post={post} />
 				))}
 			</MapView>
 			<NavigationButton getCurrentLocation={getCurrentLocation} />
 			<ZoomControl mapZoom={mapZoom} setMapZoom={setMapZoom} />
-			<CarouselSlider setRegion={setRegion} posts={posts} navigation={navigation} />
+			<CarouselSlider
+				setRegion={setRegion}
+				posts={posts}
+				navigation={navigation}
+			/>
 		</View>
 	)
 }
