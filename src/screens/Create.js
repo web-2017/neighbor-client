@@ -70,6 +70,7 @@ export default function Create({ navigation, route }) {
 		if (!title && !description && !price) {
 			setLoading(false)
 			setIsVisible(true)
+			setIsError(true)
 			setMessage('All fields are required')
 			return
 		}
@@ -106,6 +107,7 @@ export default function Create({ navigation, route }) {
 		if (!title && !description) {
 			setLoading(false)
 			setIsVisible(true)
+			setIsError(true)
 			setMessage('The title and price fields are required')
 			return
 		}
@@ -139,7 +141,7 @@ export default function Create({ navigation, route }) {
 				setLoading(false)
 			}
 		} catch (err) {
-			setIsError(false)
+			setIsError(true)
 			setLoading(false)
 			setIsVisible(true)
 			setMessage(err.message)
@@ -172,6 +174,7 @@ export default function Create({ navigation, route }) {
 				</Portal>
 				{/* <Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title> */}
 				<TextInput
+					style={{ marginBottom: 5 }}
 					clearButtonMode="always"
 					autoCapitalize="none"
 					mode="outlined"
@@ -180,6 +183,7 @@ export default function Create({ navigation, route }) {
 					onChangeText={(text) => setTitle(text)}
 				/>
 				<TextInput
+					style={{ marginBottom: 5 }}
 					clearButtonMode="always"
 					autoCapitalize="none"
 					mode="outlined"
@@ -188,6 +192,7 @@ export default function Create({ navigation, route }) {
 					onChangeText={(text) => setPrice(text?.replace(/[^0-9]/g, ''))}
 				/>
 				<TextInput
+					style={{ marginBottom: 5 }}
 					autoCapitalize="none"
 					clearButtonMode="always"
 					mode="outlined"

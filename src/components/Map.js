@@ -115,11 +115,10 @@ export default function Map({ navigation }) {
 				userInterfaceStyle="dark"
 				showsUserLocation={true}
 				showsScale={true}
+				getUserInitialCoords={region}
 				region={{
-					latitude: stateUser?._id ? stateUser?.user?.coords?.lat : region?.lat,
-					longitude: stateUser?._id
-						? stateUser?.user?.coords?.lng
-						: region?.lng,
+					latitude: region?.lat,
+					longitude: region?.lng,
 					latitudeDelta: mapZoom,
 					longitudeDelta: initialCoords.longitudeDelta,
 				}}
