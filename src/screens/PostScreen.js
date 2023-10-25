@@ -1,7 +1,21 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Text, View, StyleSheet, Image, ScrollView } from 'react-native'
-import { Button, Caption, Paragraph, Title, useTheme, Banner } from 'react-native-paper'
-import { Feather, AntDesign, Entypo, MaterialIcons, Foundation, FontAwesome } from '@expo/vector-icons'
+import {
+	Button,
+	Caption,
+	Paragraph,
+	Title,
+	useTheme,
+	Banner,
+} from 'react-native-paper'
+import {
+	Feather,
+	AntDesign,
+	Entypo,
+	MaterialIcons,
+	Foundation,
+	FontAwesome,
+} from '@expo/vector-icons'
 
 import { BASE_URL } from '../api'
 import { UserContext } from '../store/context'
@@ -14,9 +28,11 @@ export default function Post({ route, navigation }) {
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(true)
-	const [isCurrentUser, setIsCurrentUser] = useState(stateUser?._id === post?.postedBy?._id)
+	const [isCurrentUser, setIsCurrentUser] = useState(
+		stateUser?._id === post?.postedBy?._id
+	)
 
-	// console.log('stateUser', stateUser)
+	console.log('stateUser', stateUser)
 	// console.log('post', post)
 
 	const deletePostHandler = (postId) => {
@@ -100,99 +116,141 @@ export default function Post({ route, navigation }) {
 		<ScrollView>
 			<View>
 				{post?.images ? (
-					<Image style={styles.stretch} source={{ uri: `${uploadImageFilter(`${BASE_URL}/${post?.images[0]}`)}` }} />
+					<Image
+						style={styles.stretch}
+						source={{
+							uri: `${uploadImageFilter(`${BASE_URL}/${post?.images[0]}`)}`,
+						}}
+					/>
 				) : (
-					<Image style={styles.stretch} source={require('../../assets/img.jpg')} />
+					<Image
+						style={styles.stretch}
+						source={require('../../assets/img.jpg')}
+					/>
 				)}
 			</View>
 
 			<View style={styles.container}>
-				<Banner
-					visible={visible}
-					style={{ backgroundColor: colors.accent }}
-					actions={[
-						{
-							label: 'Close',
-							onPress: () => setVisible(false),
-						},
-						// {
-						// 	label: 'Learn more',
-						// 	onPress: () => setVisible(false),
-						// },
-					]}
-					icon={({ size }) => (
-						<Feather
-							name='alert-triangle'
-							size={30}
-							color='black'
-							style={{
-								width: size,
-								height: size,
-							}}
-						/>
-					)}>
-					Never pay using any gift cards and exercise caution if someone wants to ship you an item after you have paid.
-				</Banner>
+				{stateUser?._id && (
+					<Banner
+						visible={visible}
+						style={{ backgroundColor: colors.accent }}
+						actions={[
+							{
+								label: 'Close',
+								onPress: () => setVisible(false),
+							},
+							// {
+							// 	label: 'Learn more',
+							// 	onPress: () => setVisible(false),
+							// },
+						]}
+						icon={({ size }) => (
+							<Feather
+								name="alert-triangle"
+								size={30}
+								color="black"
+								style={{
+									width: size,
+									height: size,
+								}}
+							/>
+						)}
+					>
+						Never pay using any gift cards and exercise caution if someone wants
+						to ship you an item after you have paid.
+					</Banner>
+				)}
 				<Caption>Created: {formatDateHandler(post?.createdAt)}</Caption>
-				<Title style={{ color: colors.primary }}>{post?.title?.toUpperCase()}</Title>
+				<Title style={{ color: colors.primary }}>
+					{post?.title?.toUpperCase()}
+				</Title>
 				<Paragraph>
-					{post?.price} {post?.price !== 0 && <Foundation name='dollar' size={17} color={colors.primary} />}
+					{post?.price}{' '}
+					{post?.price !== 0 && (
+						<Foundation name="dollar" size={17} color={colors.primary} />
+					)}
 				</Paragraph>
 				<Paragraph>
-					<Entypo name='address' size={15} color={colors.primary} /> {post?.postedBy?.coords?.address}
+					<Entypo name="address" size={15} color={colors.primary} />{' '}
+					{post?.postedBy?.coords?.address}
 				</Paragraph>
 				<Paragraph>
-					<Entypo name='user' size={15} color={colors.primary} /> {post?.postedBy?.firstName}
+					<Entypo name="user" size={15} color={colors.primary} />{' '}
+					{post?.postedBy?.firstName}
 				</Paragraph>
 				<Paragraph>
-					<Entypo name='email' size={15} color={colors.primary} /> {post?.postedBy?.email}
+					<Entypo name="email" size={15} color={colors.primary} />{' '}
+					{post?.postedBy?.email}
 				</Paragraph>
 				<Paragraph>
-					<FontAwesome name='phone' size={15} color={colors.primary} /> {post?.postedBy?.tel}
+					<FontAwesome name="phone" size={15} color={colors.primary} />{' '}
+					{post?.postedBy?.tel}
 				</Paragraph>
 				<Paragraph style={{ color: colors.gray }}>
-					<MaterialIcons name='description' size={15} color={colors.primary} />
+					<MaterialIcons name="description" size={15} color={colors.primary} />
 					{post?.description}
 				</Paragraph>
-				<View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%', marginVertical: 20 }}>
-					{!isCurrentUser && 
-					<Button
-						color={colors.green}
-						icon="send" 
-						mode="contained" 
-						onPress={() => navigation.navigate('sendMessage', { post })}>
-						send message
-					</Button>}
+				<View
+					style={{
+						flexDirection: 'row',
+						justifyContent: 'flex-end',
+						width: '100%',
+						marginVertical: 20,
+					}}
+				>
+					{!isCurrentUser && (
+						<Button
+							color={colors.green}
+							icon="send"
+							mode="contained"
+							onPress={() => navigation.navigate('sendMessage', { post })}
+						>
+							send message
+						</Button>
+					)}
 					{!isCurrentUser && stateUser?._id && (
-						<View style={{marginLeft: 10}}>
+						<View style={{ marginLeft: 10 }}>
 							{post?.likes?.includes(stateUser?._id) ? (
-								<AntDesign name='heart' size={24} color={colors.alert} onPress={() => removeFromFavorites(postId)} />
+								<AntDesign
+									name="heart"
+									size={24}
+									color={colors.alert}
+									onPress={() => removeFromFavorites(postId)}
+								/>
 							) : (
-								<AntDesign name='hearto' size={24} color={colors.alert} onPress={() => addToFavorites(postId)} />
+								<AntDesign
+									name="hearto"
+									size={24}
+									color={colors.alert}
+									onPress={() => addToFavorites(postId)}
+								/>
 							)}
 						</View>
 					)}
 				</View>
-				{isCurrentUser && (
+				{isCurrentUser && stateUser?._id && (
 					<View style={styles.btnContainer}>
 						<Button
 							// title='Choose Photo'
 							icon={'pencil'}
 							onPress={() => navigation.navigate('editPost', { post })}
-							mode='outlined'
+							mode="outlined"
 							color={colors.green}
 							loading={loading}
-							style={{ marginVertical: 20 }}>
+							style={{ marginVertical: 20 }}
+						>
 							Edit Post
 						</Button>
 						<Button
 							// title='Choose Photo'
 							icon={'delete'}
 							onPress={() => deletePostHandler(postId)}
-							mode='outlined'
+							mode="outlined"
 							color={colors.alert}
 							loading={loading}
-							style={{ marginVertical: 20 }}>
+							style={{ marginVertical: 20 }}
+						>
 							Delete Post
 						</Button>
 					</View>

@@ -20,9 +20,10 @@ export default function HomeNavigation() {
 				tabBarLabelStyle: { fontSize: 20 },
 				tabBarItemStyle: { width: 100 },
 				tabBarStyle: { backgroundColor: 'powderblue' },
-			}}>
+			}}
+		>
 			<Stack.Screen
-				name='Home'
+				name="Home"
 				component={HomeScreen}
 				options={{
 					// title: constants.logoTitle,
@@ -31,7 +32,9 @@ export default function HomeNavigation() {
 						close: configNavigationAnimation,
 					},
 					headerTitle: () => (
-						<Text style={{ fontSize: 20, color: colors.primary }}>{constants.logoTitle.toUpperCase()}</Text>
+						<Text style={{ fontSize: 20, color: colors.primary }}>
+							{constants.logoTitle.toUpperCase()}
+						</Text>
 					),
 				}}
 			/>
@@ -42,10 +45,10 @@ export default function HomeNavigation() {
 						close: configNavigationAnimation,
 					},
 				}}
-				name='post'
+				name="post"
 				component={PostScreen}
 			/>
-			<Stack.Screen name='editPost' component={EditPost} />
+			<Stack.Screen name="editPost" component={EditPost} />
 		</Stack.Navigator>
 	)
 }

@@ -27,53 +27,72 @@ function BottomTabNavigation() {
 					// tabBarActiveBackgroundColor: colors.accent,
 					// tabBarBadge: 1, numbers
 					headerShown: false,
-				}}>
+				}}
+			>
 				<Tab.Screen
-					name='home'
+					name="home"
 					component={HomeNavigation}
 					options={{
 						tabBarLabel: 'Home',
-						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='home' color={color} size={20} />,
+						tabBarIcon: ({ color }) => (
+							<MaterialCommunityIcons name="home" color={color} size={20} />
+						),
 						headerShown: false,
 					}}
 				/>
 				{stateUser?._id && (
 					<>
 						<Tab.Screen
-							name='ads'
+							name="ads"
 							component={PostNavigation}
 							options={{
 								headerShown: false,
 								tabBarLabel: 'My Ads',
-								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='post' color={color} size={20} />,
+								tabBarIcon: ({ color }) => (
+									<MaterialCommunityIcons name="post" color={color} size={20} />
+								),
 							}}
 						/>
 						<Tab.Screen
-							name='MessageNavigation'
+							name="MessageNavigation"
 							component={MessageNavigation}
 							options={{
 								headerShown: false,
 								tabBarLabel: 'Chat',
-								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='message' color={color} size={28} />,
+								tabBarIcon: ({ color }) => (
+									<MaterialCommunityIcons
+										name="message"
+										color={color}
+										size={28}
+									/>
+								),
 							}}
 						/>
 						<Tab.Screen
-							name='favorites'
+							name="favorites"
 							component={FavoriteNavigation}
 							options={{
 								tabBarLabel: 'Favorite',
-								tabBarIcon: ({ color }) => <MaterialCommunityIcons name='heart' color={color} size={20} />,
+								tabBarIcon: ({ color }) => (
+									<MaterialCommunityIcons
+										name="heart"
+										color={color}
+										size={20}
+									/>
+								),
 							}}
 						/>
 					</>
 				)}
 
 				<Tab.Screen
-					name='profile'
+					name="profile"
 					component={ProfileNavigation}
 					options={{
 						tabBarLabel: !stateUser?._id ? 'LogIn' : 'Profile',
-						tabBarIcon: ({ color }) => <MaterialCommunityIcons name='account' color={color} size={20} />,
+						tabBarIcon: ({ color }) => (
+							<MaterialCommunityIcons name="account" color={color} size={20} />
+						),
 					}}
 				/>
 			</Tab.Navigator>

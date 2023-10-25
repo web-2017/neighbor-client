@@ -1,5 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Animated, TouchableOpacity, Image, FlatList, Easing } from 'react-native'
+import {
+	View,
+	Text,
+	StyleSheet,
+	Animated,
+	TouchableOpacity,
+	Image,
+	FlatList,
+	Easing,
+} from 'react-native'
 import { Button, Divider, Title, useTheme } from 'react-native-paper'
 import { FontAwesome, AntDesign, Entypo, Feather } from '@expo/vector-icons'
 
@@ -25,21 +34,40 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 		return (
 			<TouchableOpacity
 				style={{ ...styles.carouselItem }}
-				onPress={() => setRegion({ lat: item?.postedBy?.coords?.lat, lng: item?.postedBy?.coords?.lng })}>
+				onPress={() =>
+					setRegion({
+						lat: item?.postedBy?.coords?.lat,
+						lng: item?.postedBy?.coords?.lng,
+					})
+				}
+			>
 				<View style={{ flex: 1 }}>
-					<Image style={{ height: '100%', width: 100 }} source={{ uri: isImageExist(item?.images) }} />
+					<Image
+						style={{ height: '100%', width: 100 }}
+						source={{ uri: isImageExist(item?.images) }}
+					/>
 				</View>
 				<View style={{ ...styles.carouselContent }}>
 					<View>
-						<Text style={{ fontSize: 18, paddingBottom: 5 }}>{sliceStringFilter(item?.title, 10)}</Text>
-						<Text style={{ fontSize: 17, paddingBottom: 5, fontWeight: 'bold' }}>
-							<Entypo name='price-tag' size={15} color={colors.blue} /> {item?.price === 0 ? 'Free' : item?.price + '$'}
+						<Text style={{ fontSize: 18, paddingBottom: 5 }}>
+							{sliceStringFilter(item?.title, 10)}
+						</Text>
+						<Text
+							style={{ fontSize: 17, paddingBottom: 5, fontWeight: 'bold' }}
+						>
+							<Entypo name="price-tag" size={15} color={colors.blue} />{' '}
+							{item?.price === 0 ? 'Free' : item?.price + '$'}
 						</Text>
 						<Text>
-							<Feather name='file-text' size={13} color={colors.primary} /> {sliceStringFilter(item?.description, 25)}
+							<Feather name="file-text" size={13} color={colors.primary} />{' '}
+							{sliceStringFilter(item?.description, 25)}
 						</Text>
 					</View>
-					<Button mode='text' color={colors.red} onPress={() => navigation.navigate('post', { postId: item?._id })}>
+					<Button
+						mode="text"
+						color={colors.red}
+						onPress={() => navigation.navigate('post', { postId: item?._id })}
+					>
 						More...
 					</Button>
 				</View>
@@ -48,11 +76,27 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 	}
 
 	return (
-		<Animated.View style={{ ...styles.carousel, transform: [{ translateY: transition }], backgroundColor: '#fff' }}>
+		<Animated.View
+			style={{
+				...styles.carousel,
+				transform: [{ translateY: transition }],
+				backgroundColor: '#fff',
+			}}
+		>
 			<Title
 				style={{ ...styles.swipeBtn, color: colors.primary }}
-				onPress={() => (swipePosition === 0 ? setSwipePositionState(150) : setSwipePositionState(0))}>
-				Press <AntDesign name={`arrow${swipePosition === 0 ? 'down' : 'salt'}`} size={15} color={colors.primary} />
+				onPress={() =>
+					swipePosition === 0
+						? setSwipePositionState(150)
+						: setSwipePositionState(0)
+				}
+			>
+				Press{' '}
+				<AntDesign
+					name={`arrow${swipePosition === 0 ? 'down' : 'salt'}`}
+					size={15}
+					color={colors.primary}
+				/>
 			</Title>
 			<Divider />
 			<FlatList
@@ -93,14 +137,14 @@ const styles = StyleSheet.create({
 		// overflow: 'hidden',
 		backgroundColor: '#ffffffe7',
 
-		shadowColor: '#000',
-		shadowOffset: {
-			width: 0,
-			height: 3,
-		},
-		shadowOpacity: 0.3,
-		shadowRadius: 4.65,
-		elevation: 7,
+		// shadowColor: '#000',
+		// shadowOffset: {
+		// 	width: 0,
+		// 	height: 3,
+		// },
+		// shadowOpacity: 0.3,
+		// shadowRadius: 4.65,
+		// elevation: 7,
 	},
 	carouselContent: {
 		flexDirection: 'column',
