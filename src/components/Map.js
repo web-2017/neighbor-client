@@ -10,6 +10,7 @@ import MarkerComponent from './MarkerComponent'
 import ZoomControl from './ZoomControl'
 import NavigationButton from './NavigationButton'
 import CarouselSlider from './CarouselSlider'
+import { calculateDistance } from '../utils/filters/calculateDistance'
 
 const initialCoords = {
 	lat: 42.03508453490926,
@@ -30,6 +31,9 @@ export default function Map({ navigation }) {
 	// console.log('stateUser', stateUser)
 
 	const mapRef = useRef()
+
+	// console.log(1, stateUser)
+	// console.log(2, calculateDistance(posts?.coords))
 
 	// Permission
 	useEffect(() => {
@@ -68,7 +72,6 @@ export default function Map({ navigation }) {
 			})
 				.then((json) => json.json())
 				.then(async (data) => {
-					// console.log('data', data)
 					// filter only 1 post of each Posts for show on Marker
 					const filteredId = data.map((o) => o.postedBy._id)
 					const filteredUniqDataById = data.filter(
@@ -78,15 +81,6 @@ export default function Map({ navigation }) {
 					setPosts(data)
 					// set post = because marker has many posts and many clicks events
 					setPostsForMap(filteredUniqDataById)
-					// get user coords for initial region
-					if (stateUser?._id) {
-						const getUserInitialCoords = data.filter(
-							(elem) => elem.postedBy._id === stateUser._id
-						)
-						setRegion(getUserInitialCoords.coords)
-					} else {
-						await getCurrentLocation()
-					}
 				})
 				.catch((err) => console.log(err))
 		})

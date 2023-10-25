@@ -174,7 +174,7 @@ export default function Create({ navigation, route }) {
 				</Portal>
 				{/* <Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title> */}
 				<TextInput
-					style={{ marginBottom: 5 }}
+					style={styles.input}
 					clearButtonMode="always"
 					autoCapitalize="none"
 					mode="outlined"
@@ -183,7 +183,7 @@ export default function Create({ navigation, route }) {
 					onChangeText={(text) => setTitle(text)}
 				/>
 				<TextInput
-					style={{ marginBottom: 5 }}
+					style={styles.input}
 					clearButtonMode="always"
 					autoCapitalize="none"
 					mode="outlined"
@@ -192,7 +192,7 @@ export default function Create({ navigation, route }) {
 					onChangeText={(text) => setPrice(text?.replace(/[^0-9]/g, ''))}
 				/>
 				<TextInput
-					style={{ marginBottom: 5 }}
+					style={styles.input}
 					autoCapitalize="none"
 					clearButtonMode="always"
 					mode="outlined"
@@ -230,7 +230,7 @@ export default function Create({ navigation, route }) {
 							mode="contained"
 							icon={'close'}
 							dark
-							color={colors.alert}
+							buttonColor={colors.alert}
 						>
 							Clear
 						</Button>
@@ -241,7 +241,7 @@ export default function Create({ navigation, route }) {
 						icon={'camera'}
 						onPress={() => handleChoosePhoto()}
 						mode="contained"
-						color={colors.brown}
+						buttonColor={colors.brown}
 						style={styles.btn}
 						loading={loading}
 					>
@@ -275,5 +275,8 @@ const styles = StyleSheet.create({
 	btnContainer: {
 		justifyContent: 'space-around',
 		flexDirection: 'row',
+	},
+	input: {
+		marginBottom: 5,
 	},
 })
