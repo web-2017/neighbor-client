@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		width: '98%',
 		borderRadius: 4,
+		zIndex: 1,
 	},
 	swipeBtn: {
 		alignSelf: 'center',

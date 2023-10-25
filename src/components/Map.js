@@ -20,7 +20,6 @@ const initialCoords = {
 
 export default function Map({ navigation }) {
 	const [stateUser, setStateUser] = useContext(UserContext)
-	const [paddingStyle, setPadding] = useState(0) // show showMyLocation button
 	const [region, setRegion] = useState(initialCoords)
 	const [posts, setPosts] = useState([])
 	const [postsForMap, setPostsForMap] = useState([])
@@ -68,7 +67,8 @@ export default function Map({ navigation }) {
 				},
 			})
 				.then((json) => json.json())
-				.then((data) => {
+				.then(async (data) => {
+					// console.log('data', data)
 					// filter only 1 post of each Posts for show on Marker
 					const filteredId = data.map((o) => o.postedBy._id)
 					const filteredUniqDataById = data.filter(
@@ -78,13 +78,14 @@ export default function Map({ navigation }) {
 					setPosts(data)
 					// set post = because marker has many posts and many clicks events
 					setPostsForMap(filteredUniqDataById)
-
 					// get user coords for initial region
 					if (stateUser?._id) {
 						const getUserInitialCoords = data.filter(
 							(elem) => elem.postedBy._id === stateUser._id
 						)
 						setRegion(getUserInitialCoords.coords)
+					} else {
+						await getCurrentLocation()
 					}
 				})
 				.catch((err) => console.log(err))
@@ -110,8 +111,10 @@ export default function Map({ navigation }) {
 		<View style={{ flex: 1 }}>
 			<MapView
 				ref={mapRef}
-				// provider={PROVIDER_GOOGLE}
+				provider={PROVIDER_GOOGLE}
 				userInterfaceStyle="dark"
+				showsUserLocation={true}
+				showsScale={true}
 				region={{
 					latitude: stateUser?._id ? stateUser?.user?.coords?.lat : region?.lat,
 					longitude: stateUser?._id
@@ -122,7 +125,7 @@ export default function Map({ navigation }) {
 				}}
 				style={{
 					...StyleSheet.absoluteFillObject,
-					paddingBottom: paddingStyle,
+					marginBottom: 50,
 				}}
 				animateToRegion={{
 					region: {
@@ -137,7 +140,6 @@ export default function Map({ navigation }) {
 				showsMyLocationButton={true}
 				onMapReady={() => {
 					console.log('Map ready')
-					setPadding(100)
 				}}
 			>
 				{postsForMap?.map((post, index) => (

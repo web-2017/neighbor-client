@@ -13,7 +13,10 @@ export default function MarkerComponent({ index, post }) {
 	// console.log('post', post)
 	return (
 		<Marker
-			coordinate={{ latitude: post?.postedBy?.coords?.lat, longitude: post?.postedBy?.coords?.lng }}
+			coordinate={{
+				latitude: post?.postedBy?.coords?.lat,
+				longitude: post?.postedBy?.coords?.lng,
+			}}
 			key={index}
 			// draggable
 			// pinColor={colors.red}
