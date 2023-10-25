@@ -1,6 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { View, StyleSheet, Image, ScrollView } from 'react-native'
-import { Button, useTheme, TextInput, Title, Paragraph, Dialog, Portal } from 'react-native-paper'
+import {
+	Button,
+	useTheme,
+	TextInput,
+	Title,
+	Paragraph,
+	Dialog,
+	Portal,
+} from 'react-native-paper'
 import * as ImagePicker from 'expo-image-picker'
 import { useIsFocused } from '@react-navigation/core'
 
@@ -114,7 +122,7 @@ export default function Create({ navigation, route }) {
 
 			const data = await response.json()
 
-			// console.log('Post', data)
+			console.log('Post', data)
 
 			if (response.status === 200) {
 				setIsError(false)
@@ -146,10 +154,17 @@ export default function Create({ navigation, route }) {
 					<Dialog visible={isVisible} onDismiss={() => setIsVisible(false)}>
 						<Dialog.Title>{isError ? 'Error' : 'Success'}</Dialog.Title>
 						<Dialog.Content>
-							<Paragraph style={{ color: isError ? colors.alert : colors.green, fontSize: 20 }}>{message}!!!</Paragraph>
+							<Paragraph
+								style={{
+									color: isError ? colors.alert : colors.green,
+									fontSize: 20,
+								}}
+							>
+								{message}!!!
+							</Paragraph>
 						</Dialog.Content>
 						<Dialog.Actions>
-							<Button onPress={() => setIsVisible(false)} mode='contained'>
+							<Button onPress={() => setIsVisible(false)} mode="contained">
 								Close
 							</Button>
 						</Dialog.Actions>
@@ -157,26 +172,26 @@ export default function Create({ navigation, route }) {
 				</Portal>
 				{/* <Title style={{ textAlign: 'center', marginVertical: 30 }}>Create New Post</Title> */}
 				<TextInput
-					clearButtonMode='always'
-					autoCapitalize='none'
-					mode='outlined'
-					placeholder='title'
+					clearButtonMode="always"
+					autoCapitalize="none"
+					mode="outlined"
+					placeholder="title"
 					value={title}
 					onChangeText={(text) => setTitle(text)}
 				/>
 				<TextInput
-					clearButtonMode='always'
-					autoCapitalize='none'
-					mode='outlined'
-					placeholder='price'
+					clearButtonMode="always"
+					autoCapitalize="none"
+					mode="outlined"
+					placeholder="price"
 					value={price}
 					onChangeText={(text) => setPrice(text?.replace(/[^0-9]/g, ''))}
 				/>
 				<TextInput
-					autoCapitalize='none'
-					clearButtonMode='always'
-					mode='outlined'
-					placeholder='description'
+					autoCapitalize="none"
+					clearButtonMode="always"
+					mode="outlined"
+					placeholder="description"
 					value={description}
 					onChangeText={(text) => setDescription(text)}
 					multiline
@@ -186,44 +201,57 @@ export default function Create({ navigation, route }) {
 					<View>
 						<Image
 							loadingIndicatorSource={photo || imgPath}
-							source={{ uri: photo ? photo : uploadImageFilter(`${BASE_URL}/${imgPath}`) }}
-							style={{ width: '80%', height: 200, marginVertical: 10, alignSelf: 'center', borderRadius: 20 }}
+							source={{
+								uri: photo
+									? photo
+									: uploadImageFilter(`${BASE_URL}/${imgPath}`),
+							}}
+							style={{
+								width: '80%',
+								height: 200,
+								marginVertical: 10,
+								alignSelf: 'center',
+								borderRadius: 20,
+							}}
 						/>
 
 						<Button
-							title='Upload Photo'
+							title="Upload Photo"
 							onPress={() => {
 								setImgPath('')
 								setPhoto('')
 								setIsVisible(false)
 							}}
-							mode='contained'
+							mode="contained"
 							icon={'close'}
 							dark
-							color={colors.alert}>
+							color={colors.alert}
+						>
 							Clear
 						</Button>
 					</View>
 				) : (
 					<Button
-						title='Choose Photo'
+						title="Choose Photo"
 						icon={'camera'}
 						onPress={() => handleChoosePhoto()}
-						mode='contained'
+						mode="contained"
 						color={colors.brown}
 						style={styles.btn}
-						loading={loading}>
+						loading={loading}
+					>
 						Choose photo
 					</Button>
 				)}
 
 				<Button
-					mode='contained'
+					mode="contained"
 					color={colors.green}
 					style={styles.btn}
 					loading={loading}
 					onPress={() => (photo ? handleUploadPhoto() : createPostHandler())}
-					disabled={loading}>
+					disabled={loading}
+				>
 					Create Post
 				</Button>
 			</View>

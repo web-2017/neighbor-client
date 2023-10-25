@@ -31,6 +31,7 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 	const { colors } = useTheme()
 
 	const renderItem = ({ item }) => {
+		console.log(123, item?.postedBy?.coords?.lat)
 		return (
 			<TouchableOpacity
 				style={{ ...styles.carouselItem }}
@@ -91,11 +92,12 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 						: setSwipePositionState(0)
 				}
 			>
-				Press{' '}
+				Press
 				<AntDesign
-					name={`arrow${swipePosition === 0 ? 'down' : 'salt'}`}
+					name={`arrow${swipePosition === 0 ? 'down' : 'up'}`}
 					size={15}
 					color={colors.primary}
+					style={{ marginLeft: 10 }}
 				/>
 			</Title>
 			<Divider />
