@@ -31,7 +31,6 @@ export default function CarouselSlider({ posts, setRegion, navigation }) {
 	const { colors } = useTheme()
 
 	const renderItem = ({ item }) => {
-		console.log(123, item?.postedBy?.coords?.lat)
 		return (
 			<TouchableOpacity
 				style={{ ...styles.carouselItem }}

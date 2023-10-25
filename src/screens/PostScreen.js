@@ -28,11 +28,8 @@ export default function Post({ route, navigation }) {
 	const [post, setPost] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [visible, setVisible] = useState(true)
-	const [isCurrentUser, setIsCurrentUser] = useState(
-		stateUser?._id === post?.postedBy?._id
-	)
+	const [isCurrentUser, setIsCurrentUser] = useState(null)
 
-	console.log('stateUser', stateUser)
 	// console.log('post', post)
 
 	const deletePostHandler = (postId) => {
@@ -46,6 +43,10 @@ export default function Post({ route, navigation }) {
 			.then((json) => navigation.goBack())
 			.catch((err) => console.log(err))
 	}
+
+	useEffect(() => {
+		setIsCurrentUser(stateUser?._id === post?.postedBy?._id)
+	}, [stateUser?._id, post?.postedBy?._id])
 
 	useEffect(() => {
 		if (postId) {
